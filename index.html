@@ -1,1 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOOMIE // Spooky Sanctuary</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fira+Code:wght@400;600&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0a060d;
+            --card-bg: rgba(22, 14, 28, 0.85);
+            --border-color: #3b1f48;
+            --pink-accent: #ff79c6;
+            --pink-neon: #ff2a85;
+            --purple-glow: #bd93f9;
+            --green-slime: #50fa7b;
+            --text-main: #f8f8f2;
+            --text-muted: #a093b1;
+            --hypno-spin: 20s;
+        }
 
+        /* Themes */
+        body.theme-witchy {
+            --bg-dark: #060d08;
+            --card-bg: rgba(14, 28, 18, 0.85);
+            --border-color: #1f4827;
+            --pink-accent: #50fa7b;
+            --pink-neon: #00ff66;
+            --purple-glow: #ff79c6;
+            --green-slime: #ffb86c;
+        }
+
+        body.theme-midnight {
+            --bg-dark: #000000;
+            --card-bg: rgba(15, 15, 20, 0.9);
+            --border-color: #282a36;
+            --pink-accent: #bd93f9;
+            --pink-neon: #9a4dff;
+            --purple-glow: #ff79c6;
+            --green-slime: #8be9fd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Fredoka', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        /* Hypnotic Background Spiral */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Scanline Overlay Effect */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 999;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--pink-neon);
+            border-radius: 5px;
+            box-shadow: 0 0 10px var(--pink-neon);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / Banner */
+        header {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                        0 0 15px rgba(255, 121, 198, 0.2);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,121,198,0.05) 0%, transparent 70%);
+            animation: pulse 4s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--pink-accent);
+            box-shadow: 0 0 20px var(--pink-neon);
+            object-fit: cover;
+            background: #201329;
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 18px;
+            height: 18px;
+            background: var(--green-slime);
+            border: 3px solid var(--bg-dark);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--green-slime);
+        }
+
+        .profile-info h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3rem;
+            color: var(--pink-accent);
+            text-shadow: 0 0 10px var(--pink-neon), 3px 3px 0px #000;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .badge {
+            background: rgba(255, 121, 198, 0.1);
+            border: 1px solid var(--pink-accent);
+            color: var(--pink-accent);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Controls / Theme Switcher */
+        .header-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 8px;
+            background: rgba(0,0,0,0.4);
+            padding: 6px;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .theme-btn.active {
+            border-color: #fff;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        .theme-btn[data-theme="bubblegum"] { background: #ff79c6; }
+        .theme-btn[data-theme="witchy"] { background: #50fa7b; }
+        .theme-btn[data-theme="midnight"] { background: #bd93f9; }
+
+        /* Navigation Tabs */
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 12px 22px;
+            border-radius: 15px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--pink-accent);
+            border-color: var(--pink-accent);
+            box-shadow: 0 0 15px rgba(255, 121, 198, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--pink-accent);
+            color: var(--bg-dark);
+            border-color: var(--pink-accent);
+            box-shadow: 0 0 20px var(--pink-neon);
+            font-weight: 700;
+        }
+
+        /* Tab Content Panes */
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.2rem;
+            color: var(--purple-glow);
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 0 0 8px rgba(189, 147, 249, 0.4);
+        }
+
+        /* Vibe Check Tab */
+        .bio-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .bio-grid { grid-template-columns: 1fr; }
+        }
+
+        .bio-text p {
+            line-height: 1.7;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .sticker-board {
+            background: rgba(0,0,0,0.3);
+            border: 2px dashed var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 15px;
+        }
+
+        .sticker {
+            background: #111;
+            border: 2px solid var(--pink-accent);
+            border-radius: 12px;
+            padding: 10px 15px;
+            font-size: 1.2rem;
+            cursor: grab;
+            box-shadow: 3px 3px 0 var(--pink-neon);
+            transition: transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sticker:hover {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        /* ARK Trading Co. Hub */
+        .ark-shop {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .dino-card {
+            background: rgba(10, 6, 13, 0.6);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dino-card:hover {
+            border-color: var(--green-slime);
+            box-shadow: 0 0 20px rgba(80, 250, 123, 0.3);
+            transform: translateY(-50px);
+        }
+
+        .dino-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            background: #1a1025;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .mutation-badge {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: var(--pink-neon);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Retro Audio Jukebox */
+        .jukebox {
+            background: #11091c;
+            border: 3px solid var(--pink-neon);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 25px rgba(255, 42, 133, 0.4);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .winamp-title {
+            background: linear-gradient(90deg, var(--pink-neon), var(--purple-glow));
+            color: #fff;
+            padding: 6px 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .visualizer-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 60px;
+            gap: 4px;
+            background: #000;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .v-bar {
+            flex: 1;
+            background: var(--green-slime);
+            height: 20%;
+            border-radius: 2px;
+            transition: height 0.1s ease;
+        }
+
+        .v-bar.playing {
+            animation: bounce 0.6s infinite alternate ease-in-out;
+        }
+
+        @keyframes bounce {
+            0% { height: 10%; }
+            100% { height: 95%; background: var(--pink-neon); }
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .audio-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--pink-accent);
+            color: var(--pink-accent);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+
+        .audio-btn:hover {
+            background: var(--pink-accent);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--pink-accent);
+        }
+
+        /* Obsidian Snippet Showcase */
+        .code-block {
+            background: #0d0814;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--green-slime);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-code-btn {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .copy-code-btn:hover {
+            color: #fff;
+            background: var(--pink-neon);
+        }
+
+        /* Cursor Sparkle Particles */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--pink-accent);
+            box-shadow: 0 0 10px var(--pink-neon);
+            z-index: 9999;
+            animation: sparkleFade 0.8s forwards ease-out;
+        }
+
+        @keyframes sparkleFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(2) translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-bg"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <!-- Header Banner -->
+        <header>
+            <div class="profile-section">
+                <div class="avatar-container">
+                    <div class="avatar-img" style="display:flex; align-items:center; justify-content:center; font-size:3rem; color:var(--pink-accent);">
+                        <i class="fa-solid fa-skull"></i>
+                    </div>
+                    <div class="status-dot" title="Online in Astraeos"></div>
+                </div>
+                <div class="profile-info">
+                    <h1>BLOOMIE</h1>
+                    <p><i class="fa-solid fa-location-dot" style="color:var(--pink-accent);"></i> West Pensacola, FL // Amissa</p>
+                    <div class="badges">
+                        <span class="badge"><i class="fa-solid fa-mug-hot"></i> Coffee Fueled</span>
+                        <span class="badge"><i class="fa-solid fa-dragon"></i> Dino Breeder</span>
+                        <span class="badge"><i class="fa-solid fa-skull-crossbones"></i> G59 Vibe</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-controls">
+                <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select Vibe</span>
+                <div class="theme-selector">
+                    <div class="theme-btn active" data-theme="bubblegum" title="Bubblegum Goth"></div>
+                    <div class="theme-btn" data-theme="witchy" title="Witchy Redwoods"></div>
+                    <div class="theme-btn" data-theme="midnight" title="Midnight Shadow"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav>
+            <button class="tab-btn active" data-tab="vibe"><i class="fa-solid fa-ghost"></i> Vibe Check</button>
+            <button class="tab-btn" data-tab="pink-thorn"><i class="fa-solid fa-gem"></i> Pink Thorn Trading Co.</button>
+            <button class="tab-btn" data-tab="jukebox"><i class="fa-solid fa-compact-disc"></i> Spooky Jukebox</button>
+            <button class="tab-btn" data-tab="vault"><i class="fa-solid fa-wand-magic-sparkles"></i> Crystal Vault</button>
+            <button class="tab-btn" data-tab="obsidian"><i class="fa-solid fa-code"></i> CSS & Code</button>
+        </nav>
+
+        <!-- Tab 1: Vibe Check -->
+        <div class="tab-content active" id="tab-vibe">
+            <h2><i class="fa-solid fa-heart-crack"></i> Spooky Ooky Cutie Patootie Energy</h2>
+            <div class="bio-grid">
+                <div class="bio-text">
+                    <p>Welcome to my creepy-cute corner of the internet! I blend dark fantasy, Y2K aesthetic, and underground shadow rap vibes into digital art, ARK dino breeding lines, and custom web setups.</p>
+                    <p>When I'm not tweaking Obsidian CSS snippets or crafting custom vector badges, you can find me brewing iced frappes, hanging out with my fur babies (Bilbo, Lucifer, & Ozzie), or leveling up stat mutations in the redwoods.</p>
+                </div>
+                <div>
+                    <h3 style="font-size:1.1rem; margin-bottom:10px; color:var(--pink-accent);">Interactive Sticker Stash</h3>
+                    <div class="sticker-board" id="sticker-stash">
+                        <div class="sticker"><i class="fa-solid fa-skull"></i> G59</div>
+                        <div class="sticker"><i class="fa-solid fa-cat"></i> Lucifer</div>
+                        <div class="sticker"><i class="fa-solid fa-dog"></i> Bilbo</div>
+                        <div class="sticker"><i class="fa-solid fa-moon"></i> Whimsigoth</div>
+                        <div class="sticker"><i class="fa-solid fa-coffee"></i> Frappe Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: The Pink Thorn Trading Co. -->
+        <div class="tab-content" id="tab-pink-thorn">
+            <h2><i class="fa-solid fa-store"></i> The Pink Thorn Trading Co.</h2>
+            <p style="margin-bottom:20px; color:var(--text-muted);">Premier ARK: Survival Ascended custom colorways & mutant dino breeder located in the Astraeos redwoods.</p>
+            
+            <div class="ark-shop">
+                <div class="dino-card">
+                    <span class="mutation-badge">Top Mutation</span>
+                    <div class="dino-preview"><i class="fa-solid fa-dragon" style="color:#ff79c6;"></i></div>
+                    <h3 style="color:var(--pink-accent);">Cotton Candy Drakyros</h3>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin: 8px 0;">Magenta & Teal Stacked Stats. Bred for maximum aggression & aesthetic flex.</p>
+                    <span style="font-family:'Fira Code', monospace; color:var(--green-slime); font-size:0.9rem;">Status: In Stock</span>
+                </div>
+
+                <div class="dino-card">
+                    <span class="mutation-badge" style="background:var(--purple-glow);">New Line</span>
+                    <div class="dino-preview"><i class="fa-solid fa-locust" style="color:#bd93f9;"></i></div>
+                    <h3 style="color:var(--purple-glow);">Shadowglen Wyvern</h3>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin: 8px 0;">Midnight Black belly with Neon Violet wing accents.</p>
+                    <span style="font-family:'Fira Code', monospace; color:var(--green-slime); font-size:0.9rem;">Status: Custom Order</span>
+                </div>
+
+                <div class="dino-card">
+                    <span class="mutation-badge" style="background:var(--green-slime); color:#000;">Event Exclusive</span>
+                    <div class="dino-preview"><i class="fa-solid fa-crow" style="color:#50fa7b;"></i></div>
+                    <h3 style="color:var(--green-slime);">Pirate Plunder Argentavis</h3>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin: 8px 0;">Special Talk Like a Pirate Day event edition colorway.</p>
+                    <span style="font-family:'Fira Code', monospace; color:var(--pink-neon); font-size:0.9rem;">Status: Limited</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Spooky Jukebox -->
+        <div class="tab-content" id="tab-jukebox">
+            <h2><i class="fa-solid fa-radio"></i> Y2K Winamp Synth Deck</h2>
+            <div class="jukebox">
+                <div class="winamp-title">
+                    <span><i class="fa-solid fa-music"></i> NOW_PLAYING.MP3</span>
+                    <span>128 kbps</span>
+                </div>
+                <div class="visualizer-bars" id="v-bars">
+                    <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+                    <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+                    <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+                    <div class="v-bar"></div>
+                </div>
+                <div style="text-align:center; margin-bottom:15px; font-family:'Fira Code', monospace; color:var(--pink-accent);" id="track-name">
+                    $uicideboy$ - Matte Black Synthwave Loop
+                </div>
+                <div class="audio-controls">
+                    <button class="audio-btn" id="prev-btn"><i class="fa-solid fa-backward"></i></button>
+                    <button class="audio-btn" id="play-btn"><i class="fa-solid fa-play"></i></button>
+                    <button class="audio-btn" id="next-btn"><i class="fa-solid fa-forward"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Crystal Vault -->
+        <div class="tab-content" id="tab-vault">
+            <h2><i class="fa-solid fa-gem"></i> Polished Mineral Specimen Vault</h2>
+            <div class="ark-shop">
+                <div class="dino-card" style="text-align:center;">
+                    <div style="font-size:3.5rem; color:#ff79c6; margin-bottom:10px;"><i class="fa-solid fa-stroopwafel"></i></div>
+                    <h3 style="color:var(--pink-accent);">Flower Agate Sphere</h3>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">Soft pink chalcedony with delicate plume inclusions resembling blooming flowers.</p>
+                </div>
+                <div class="dino-card" style="text-align:center;">
+                    <div style="font-size:3.5rem; color:#50fa7b; margin-bottom:10px;"><i class="fa-solid fa-cube"></i></div>
+                    <h3 style="color:var(--green-slime);">Rainbow Fluorite Tower</h3>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">Banded purple, green, and clear fluorite carved into a sharp focal point.</p>
+                </div>
+                <div class="dino-card" style="text-align:center;">
+                    <div style="font-size:3.5rem; color:#bd93f9; margin-bottom:10px;"><i class="fa-solid fa-circle"></i></div>
+                    <h3 style="color:var(--purple-glow);">Ocean Jasper Carver</h3>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">Orbicular pattern with deep teal and dark pastel cream eyelets.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Obsidian / Code -->
+        <div class="tab-content" id="tab-obsidian">
+            <h2><i class="fa-solid fa-code"></i> "Bloomie's Lighter" CSS Snippet</h2>
+            <p style="margin-bottom:15px; color:var(--text-muted);">Custom theme stylesheet built for Obsidian & web note setups.</p>
+            <div class="code-block">
+                <button class="copy-code-btn" id="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+<pre><code>/* Bloomie's Lighter - Bubblegum Goth Snippet */
+:root {
+  --accent-pink: #ff79c6;
+  --accent-purple: #bd93f9;
+  --bg-dark: #0a060d;
+}
+
+.nav-folder-title:hover {
+  color: var(--accent-pink) !important;
+  text-shadow: 0 0 8px #ff2a85;
+}
+
+.markdown-preview-view h1 {
+  font-family: 'Creepster', cursive;
+  color: var(--accent-purple);
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        // Tab Navigation System
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(`tab-${targetTab}`).classList.add('active');
+                
+                playClickSound();
+            });
+        });
+
+        // Theme Switcher System
+        const themeBtns = document.querySelectorAll('.theme-btn');
+        themeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                themeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                document.body.classList.remove('theme-witchy', 'theme-midnight');
+                const selectedTheme = btn.getAttribute('data-theme');
+                if(selectedTheme !== 'bubblegum') {
+                    document.body.classList.add(`theme-${selectedTheme}`);
+                }
+                playClickSound();
+            });
+        });
+
+        // Background Spiral Animation Canvas
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let rotationAngle = 0;
+        function drawSpiral() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rotationAngle);
+
+            ctx.beginPath();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--pink-neon').trim() || '#ff2a85';
+
+            for (let i = 0; i < 720; i++) {
+                const angle = 0.1 * i;
+                const r = 3 * angle;
+                const x = r * Math.cos(angle);
+                const y = r * Math.sin(angle);
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.restore();
+
+            rotationAngle += 0.003;
+            requestAnimationFrame(drawSpiral);
+        }
+        drawSpiral();
+
+        // Mouse Trail Particle Effect
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() < 0.2) {
+                const particle = document.createElement('div');
+                particle.className = 'sparkle';
+                particle.style.left = `${e.clientX}px`;
+                particle.style.top = `${e.clientY}px`;
+                document.body.appendChild(particle);
+
+                setTimeout(() => particle.remove(), 800);
+            }
+        });
+
+        // Retro Web Audio Synthesizer Sound on Click
+        let audioCtx;
+        function playClickSound() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.08);
+
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        }
+
+        // Jukebox Player Animation Toggle
+        const playBtn = document.getElementById('play-btn');
+        const vBars = document.querySelectorAll('.v-bar');
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            playBtn.innerHTML = isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+            vBars.forEach(bar => {
+                if (isPlaying) bar.classList.add('playing');
+                else bar.classList.remove('playing');
+            });
+            playClickSound();
+        });
+
+        // Copy Code Button Snippet
+        document.getElementById('copy-btn').addEventListener('click', () => {
+            const codeText = document.querySelector('pre code').innerText;
+            navigator.clipboard.writeText(codeText);
+            const btn = document.getElementById('copy-btn');
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+            }, 2000);
+            playClickSound();
+        });
+    </script>
+</body>
+</html>
