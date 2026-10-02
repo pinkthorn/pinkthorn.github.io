@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOOMIE // GHOST GIRL 🖤</title>
+    <!-- Google Fonts: Retro OS & Gothic Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=UnifrakturMaguntia&family=VT323&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-void: #000000;
+            --pink-neon: #ff5da2;
+            --pink-bubblegum: #ff85c0;
+            --pink-soft: #ffb3d9;
+            --pink-dark: #3a001e;
+            --grey-dark: #0f0d13;
+            --grey-card: #18141e;
+            --grey-border: #2a2233;
+            --text-light: #ffebf5;
+            --text-muted: #b8a2b5;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            image-rendering: pixelated;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-void);
+            color: var(--text-light);
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- HYPNO SPIRAL BACKGROUND (PURE PINK & VOID BLACK) --- */
+        .hypno-bg-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 140vw;
+            height: 140vw;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hypno-spiral {
+            width: 100%;
+            height: 100%;
+            animation: slowSpin 45s linear infinite;
+        }
+
+        @keyframes slowSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Ambient Flying Bats */
+        .bat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-bat {
+            position: absolute;
+            color: var(--pink-neon);
+            opacity: 0.25;
+            font-size: 24px;
+            animation: batFly 16s linear infinite;
+        }
+
+        @keyframes batFly {
+            0% { transform: translate(-50px, 100vh) scale(0.8) rotate(10deg); }
+            50% { transform: translate(50vw, 50vh) scale(1.2) rotate(-10deg); }
+            100% { transform: translate(105vw, -50px) scale(0.8) rotate(10deg); }
+        }
+
+        /* Header Bar */
+        .pixel-header {
+            position: relative;
+            z-index: 2;
+            background: var(--grey-card);
+            border: 4px solid var(--pink-neon);
+            box-shadow: 6px 6px 0px var(--pink-dark), 10px 10px 0px #000;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-title {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 44px;
+            color: var(--pink-neon);
+            text-shadow: 3px 3px 0px #000, 0 0 15px var(--pink-neon);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .header-subtitle {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: var(--pink-bubblegum);
+            letter-spacing: 2px;
+            margin-top: 6px;
+        }
+
+        /* Desktop Grid */
+        .desktop {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            padding-bottom: 90px;
+        }
+
+        /* Windows / Cards */
+        .pixel-window {
+            background: var(--grey-card);
+            border: 4px solid var(--pink-neon);
+            box-shadow: 6px 6px 0px #000;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window-header {
+            background: var(--pink-neon);
+            color: #000;
+            padding: 8px 12px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #000;
+        }
+
+        .window-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Buttons */
+        .pixel-btn {
+            background: #000;
+            color: var(--pink-neon);
+            border: 3px solid var(--pink-neon);
+            padding: 8px 14px;
+            font-family: 'Silkscreen', cursive;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+        }
+
+        .pixel-btn:hover {
+            background: var(--pink-neon);
+            color: #000;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--pink-dark);
+        }
+
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        /* Bio Profile Card Header */
+        .bio-profile-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px dashed var(--pink-neon);
+            padding-bottom: 15px;
+        }
+
+        .g59-skull-icon {
+            width: 70px;
+            height: 70px;
+            background: #000;
+            border: 3px solid var(--pink-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 3px 3px 0px var(--pink-dark);
+        }
+
+        .bio-tag {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 32px;
+            color: var(--pink-bubblegum);
+            margin: 0;
+            line-height: 1;
+        }
+
+        /* Pet Cards Grid */
+        .pet-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .pet-card {
+            background: #000;
+            border: 2px solid var(--pink-bubblegum);
+            padding: 10px;
+            position: relative;
+        }
+
+        .pet-card.memorial {
+            border-color: var(--pink-soft);
+            background: #0a0006;
+        }
+
+        .pet-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: var(--pink-neon);
+            margin-bottom: 5px;
+        }
+
+        .pet-desc {
+            font-size: 16px;
+            color: var(--text-light);
+            line-height: 1.2;
+        }
+
+        /* Status & Badges */
+        .badge {
+            display: inline-block;
+            background: var(--pink-dark);
+            color: var(--pink-neon);
+            border: 1px solid var(--pink-neon);
+            padding: 3px 8px;
+            font-family: 'Silkscreen', cursive;
+            font-size: 11px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #000;
+            border-top: 4px solid var(--pink-neon);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .taskbar-clock {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--pink-neon);
+        }
+
+        /* Interactive Floating Heart FX */
+        .floating-heart {
+            position: absolute;
+            font-size: 18px;
+            color: var(--pink-neon);
+            pointer-events: none;
+            animation: rise 1s forwards ease-out;
+            z-index: 999;
+        }
+
+        @keyframes rise {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.5); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLOW ROTATING HYPNO SWIRL BACKGROUND (PURE PINK) -->
+    <div class="hypno-bg-container">
+        <svg class="hypno-spiral" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 250, 250 m 0, 0 a 5,5 0 0,1 0,-10 a 10,10 0 0,1 10,10 a 20,20 0 0,1 -20,20 a 30,30 0 0,1 -30,-30 a 40,40 0 0,1 40,-40 a 50,50 0 0,1 50,50 a 60,60 0 0,1 -60,60 a 70,70 0 0,1 -70,-70 a 80,80 0 0,1 80,-80 a 90,90 0 0,1 90,90 a 100,100 0 0,1 -100,100 a 110,110 0 0,1 -110,-110 a 120,120 0 0,1 120,-120 a 130,130 0 0,1 130,130 a 140,140 0 0,1 -140,140 a 150,150 0 0,1 -150,-150 a 160,160 0 0,1 160,-160 a 170,170 0 0,1 170,170 a 180,180 0 0,1 -180,180 a 190,190 0 0,1 -190,-190 a 200,200 0 0,1 200,-200 a 210,210 0 0,1 210,210 a 220,220 0 0,1 -220,220 a 230,230 0 0,1 -230,-230 a 240,240 0 0,1 240,-240" 
+            fill="none" stroke="#ff5da2" stroke-width="12" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <!-- Floating Bat Overlay -->
+    <div class="bat-overlay">
+        <div class="floating-bat" style="top:10%; animation-delay: 0s;">🦇</div>
+        <div class="floating-bat" style="top:40%; animation-delay: 5s;">🦇</div>
+        <div class="floating-bat" style="top:70%; animation-delay: 10s;">🦇</div>
+    </div>
+
+    <!-- Header -->
+    <div class="pixel-header">
+        <div>
+            <h1 class="header-title">ghost girl // bloomie</h1>
+            <div class="header-subtitle">AMISSA • THE PINK THORN TRADING CO.</div>
+        </div>
+        <div>
+            <button class="pixel-btn" onclick="playAudioBeep(660, 0.1)">SFX 🔊</button>
+        </div>
+    </div>
+
+    <!-- Main Grid Desktop -->
+    <div class="desktop">
+
+        <!-- MODULE 1: About Me -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>PROFILE.SYS</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div class="bio-profile-box">
+                    <div class="g59-skull-icon">💀</div>
+                    <div>
+                        <h2 class="bio-tag">Bloomie / Amissa</h2>
+                        <div style="font-size: 16px; color: var(--pink-bubblegum);">
+                            Goth-Kawaii • Digital Artist • ARK Breeder
+                        </div>
+                    </div>
+                </div>
+
+                <div style="line-height: 1.4;">
+                    Welcome to my little corner of the void 🖤 I run <b>The Pink Thorn Trading Co.</b> over in <i>ARK: Survival Ascended</i>, specializing in custom mutated colorways & stat lines. When I'm not breeding dinos, I'm usually making vector stickers, writing CSS snippets, or sipping iced caramel Frappuccinos.
+                </div>
+
+                <div>
+                    <div class="badge">🕸️ WHIMSIGOTH</div>
+                    <div class="badge">🦇 G59 VIBES</div>
+                    <div class="badge">☕ CARAMEL FRAPPUCCINOS</div>
+                    <div class="badge">🎨 AFFINITY DESIGNER</div>
+                    <div class="badge">💻 OBSIDIAN CSS</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 2: The Fur Babies -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>FUR_BABIES.LOG</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div style="font-family:'Press Start 2P'; font-size:11px; color:var(--pink-neon);">
+                    MY FAMILIARS 🐾
+                </div>
+
+                <div class="pet-grid">
+                    <!-- Bilbo -->
+                    <div class="pet-card">
+                        <div class="pet-name">🐶 BILBO</div>
+                        <div class="pet-desc">My goofy senior pup! Half-blind, deaf, and 100% good boy.</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Bilbo', 'BARK! 🐾', 200, event)">PAT BILBO</button>
+                    </div>
+
+                    <!-- Lucifer -->
+                    <div class="pet-card">
+                        <div class="pet-name">🐱‍⬛ LUCIFER</div>
+                        <div class="pet-desc">Handsome tuxedo cat & main desktop companion.</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Lucifer', 'Purrr~ 🐈‍⬛', 520, event)">PAT LUCIFER</button>
+                    </div>
+
+                    <!-- Ozzie -->
+                    <div class="pet-card">
+                        <div class="pet-name">🐈‍⬛ OZZIE</div>
+                        <div class="pet-desc">All-black stealth void cat with glowing eyes.</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Ozzie', 'Meow! 🖤', 600, event)">PAT OZZIE</button>
+                    </div>
+
+                    <!-- Circa -->
+                    <div class="pet-card memorial">
+                        <div class="pet-name" style="color:var(--pink-soft);">🌈 CIRCA</div>
+                        <div class="pet-desc">In loving memory. Always loafing in my heart. 🕯️</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Circa', '✨ Angel Cat ✨', 880, event)">LIGHT CANDLE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 3: Rotation -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>ROTATION.EXE</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div style="font-family:'Press Start 2P'; font-size:11px; color:var(--pink-neon);">
+                    🎮 CURRENT GAMES
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    <div class="badge">ARK: Survival Ascended</div>
+                    <div class="badge">World of Warcraft</div>
+                    <div class="badge">League of Legends</div>
+                    <div class="badge">FragPunk</div>
+                    <div class="badge">Risk of Rain 2</div>
+                    <div class="badge">Funguys Swarm</div>
+                </div>
+
+                <div style="font-family:'Press Start 2P'; font-size:11px; color:var(--pink-neon); margin-top:10px;">
+                    🎧 MUSIC ON REPEAT
+                </div>
+                <div style="line-height:1.3; background:#000; padding:10px; border:2px solid var(--pink-dark);">
+                    • <b>$uicideboy$</b> ($crim & Ruby) <br>
+                    • Moldkilla & Humbe <br>
+                    • Dark Trap / Shadow Rap / Lofi Horror Beats
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4: Chiptune Player -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>CHIPTUNE_PLAYER.WAV</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div style="font-family:'Silkscreen'; font-size:12px; color:var(--pink-neon);">
+                    TRACK: "VOID_PINK_LOFI_LOOP"
+                </div>
+                
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="pixel-btn" style="flex:1" id="musicBtn" onclick="toggleLoop()">▶ PLAY 8-BIT LOOP</button>
+                    <button class="pixel-btn" onclick="playArp()">🎶 SOLI</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="pixel-btn" onclick="playAudioBeep(440, 0.08)">🩸 GHOST_GIRL_OS</button>
+        <div class="taskbar-clock" id="pixelClock">12:00 AM</div>
+    </div>
+
+    <script>
+        // Web Audio Synth Engine
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playAudioBeep(freq, duration) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function spawnFloatingHeart(e) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerText = '💖';
+            heart.style.left = (e.clientX || 100) + 'px';
+            heart.style.top = (e.clientY || 100) + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        }
+
+        function patPet(name, responseText, soundFreq, e) {
+            playAudioBeep(soundFreq, 0.15);
+            spawnFloatingHeart(e);
+            alert(`${name}: "${responseText}"`);
+        }
+
+        let isPlaying = false;
+        let loopInterval;
+
+        function toggleLoop() {
+            const btn = document.getElementById('musicBtn');
+            if (isPlaying) {
+                clearInterval(loopInterval);
+                isPlaying = false;
+                btn.innerText = '▶ PLAY 8-BIT LOOP';
+            } else {
+                isPlaying = true;
+                btn.innerText = '⏸ PAUSE';
+                const scale = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00];
+                let idx = 0;
+                loopInterval = setInterval(() => {
+                    playAudioBeep(scale[idx], 0.12);
+                    idx = (idx + 1) % scale.length;
+                }, 220);
+            }
+        }
+
+        function playArp() {
+            const notes = [440, 554.37, 659.25, 880];
+            notes.forEach((freq, index) => {
+                setTimeout(() => playAudioBeep(freq, 0.1), index * 90);
+            });
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('pixelClock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
