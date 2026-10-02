@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOOM-OS 👾 Pixel Edition</title>
+    <!-- Pixel Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Silkscreen&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-void: #0d0b10;
+            --pink-hot: #ff66b2;
+            --pink-soft: #ff99cc;
+            --slime-green: #00ff99;
+            --purple-dark: #2a1b3d;
+            --purple-light: #6a4c93;
+            --grey-dark: #1e1b26;
+            --grey-light: #3a354a;
+            --text-light: #f0e6f6;
+            --gold: #ffcc00;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            image-rendering: pixelated;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-void);
+            color: var(--text-light);
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CRT Overlay Effect */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                rgba(18, 16, 26, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Desktop Container */
+        .desktop {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* Header Bar */
+        .pixel-header {
+            background: var(--purple-dark);
+            border: 4px solid var(--pink-hot);
+            box-shadow: 6px 6px 0px #000;
+            padding: 15px 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .pixel-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: var(--pink-hot);
+            text-shadow: 3px 3px #000;
+            margin: 0;
+        }
+
+        .pixel-title span {
+            color: var(--slime-green);
+        }
+
+        /* Pixel Windows */
+        .pixel-window {
+            background: var(--grey-dark);
+            border: 4px solid var(--purple-light);
+            box-shadow: 6px 6px 0px #000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .window-header {
+            background: var(--purple-light);
+            color: #fff;
+            padding: 8px 12px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #000;
+        }
+
+        .window-body {
+            padding: 15px;
+            flex-grow: 1;
+        }
+
+        /* Pixel Buttons */
+        .pixel-btn {
+            background: var(--purple-dark);
+            color: var(--pink-hot);
+            border: 3px solid var(--pink-hot);
+            padding: 8px 12px;
+            font-family: 'Silkscreen', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+        }
+
+        .pixel-btn:hover {
+            background: var(--pink-hot);
+            color: #000;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000;
+        }
+
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .btn-green {
+            border-color: var(--slime-green);
+            color: var(--slime-green);
+        }
+        .btn-green:hover {
+            background: var(--slime-green);
+            color: #000;
+        }
+
+        /* Tamagotchi Pet Module */
+        .pet-stage {
+            background: var(--bg-void);
+            border: 3px solid #000;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .pixel-cat {
+            width: 64px;
+            height: 64px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-bar-container {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-family: 'Silkscreen', cursive;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+
+        .stat-bar {
+            height: 14px;
+            background: var(--grey-light);
+            border: 2px solid #000;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: var(--pink-hot);
+            width: 75%;
+            transition: width 0.3s ease;
+        }
+
+        /* Spooky Canvas Dungeon Game */
+        #gameCanvas {
+            background: #000;
+            border: 3px solid var(--slime-green);
+            width: 100%;
+            height: 220px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Chiptune Audio Player */
+        .chip-equalizer {
+            display: flex;
+            gap: 4px;
+            height: 40px;
+            align-items: flex-end;
+            margin-bottom: 15px;
+            background: #000;
+            padding: 5px;
+            border: 2px solid var(--purple-light);
+        }
+
+        .eq-bar {
+            flex-grow: 1;
+            background: var(--pink-hot);
+            height: 20%;
+            transition: height 0.1s ease;
+        }
+
+        /* Mutant Egg Incubator */
+        .incubator-box {
+            background: #000;
+            border: 3px solid var(--pink-hot);
+            padding: 15px;
+            text-align: center;
+        }
+
+        .egg-sprite {
+            font-size: 40px;
+            animation: float 2s infinite ease-in-out;
+            display: inline-block;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--purple-dark);
+            border-top: 4px solid var(--pink-hot);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .taskbar-clock {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--slime-green);
+        }
+
+        /* Floating particles */
+        .floating-heart {
+            position: absolute;
+            font-size: 16px;
+            color: var(--pink-hot);
+            pointer-events: none;
+            animation: rise 1s forwards ease-out;
+        }
+
+        @keyframes rise {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.5); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="crt-overlay" id="crtOverlay"></div>
+
+    <!-- Header -->
+    <div class="pixel-header">
+        <h1 class="pixel-title">BLOOM-OS <span>v3.0</span> [PIXEL_EDITION]</h1>
+        <div style="display: flex; gap: 10px;">
+            <button class="pixel-btn btn-green" onclick="toggleCRT()">CRT: ON/OFF</button>
+            <button class="pixel-btn" onclick="playBeep(600, 0.1)">SFX TEST</button>
+        </div>
+    </div>
+
+    <!-- Main Desktop Layout -->
+    <div class="desktop">
+
+        <!-- MODULE 1: Cat Tamagotchi -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>LUCIFER.EXE (FAMILIAR)</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div class="pet-stage" id="petStage">
+                    <div id="speechBubble" style="position:absolute; top: 10px; font-family:'Silkscreen'; font-size:10px; background:#fff; color:#000; padding:3px 6px; border:2px solid #000; display:none;">
+                        Meow! 💕
+                    </div>
+                    <!-- Pixel Tuxedo Cat SVG -->
+                    <svg class="pixel-cat" id="catSprite" onclick="patCat(event)" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 3H6V5H4V3Z" fill="#ff66b2"/>
+                        <path d="M10 3H12V5H10V3Z" fill="#ff66b2"/>
+                        <path d="M3 5H13V13H3V5Z" fill="#1e1b26"/>
+                        <path d="M6 8H7V9H6V8Z" fill="#00ff99"/>
+                        <path d="M9 8H10V9H9V8Z" fill="#00ff99"/>
+                        <path d="M7 10H9V12H7V10Z" fill="#ffffff"/>
+                        <path d="M2 7H3V11H2V7Z" fill="#1e1b26"/>
+                        <path d="M13 7H14V11H13V7Z" fill="#1e1b26"/>
+                    </svg>
+                </div>
+
+                <div class="stat-bar-container">
+                    <div class="stat-label">
+                        <span>HAPPINESS</span>
+                        <span id="happyVal">80%</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill" id="happyBar" style="width: 80%;"></div>
+                    </div>
+                </div>
+
+                <div class="stat-bar-container">
+                    <div class="stat-label">
+                        <span>FULLNESS</span>
+                        <span id="fullVal">50%</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill" id="fullBar" style="width: 50%; background: var(--slime-green);"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 15px;">
+                    <button class="pixel-btn" style="flex:1" onclick="feedCat(event)">🐟 TUNA</button>
+                    <button class="pixel-btn btn-green" style="flex:1" onclick="playCat(event)">🔴 LASER</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 2: Pixel Dungeon Crawler -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>SPOOKY_CRAWL.BAT</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <canvas id="gameCanvas" width="280" height="180"></canvas>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-family:'Silkscreen'; font-size:12px;">SCORE: <span id="gameScore" style="color:var(--slime-green)">0</span></div>
+                    <div>
+                        <button class="pixel-btn" onclick="movePlayer(-10)">◄</button>
+                        <button class="pixel-btn" onclick="movePlayer(10)">►</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 3: 8-Bit Chiptune Box -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>CHIPTUNE_SYNTH.WAV</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div style="font-family:'Silkscreen'; font-size:12px; margin-bottom:8px; color:var(--pink-hot)">
+                    TRACK: "VOID_COFFEE_LOFI_8BIT"
+                </div>
+                <div class="chip-equalizer">
+                    <div class="eq-bar" id="eq1"></div>
+                    <div class="eq-bar" id="eq2"></div>
+                    <div class="eq-bar" id="eq3"></div>
+                    <div class="eq-bar" id="eq4"></div>
+                    <div class="eq-bar" id="eq5"></div>
+                    <div class="eq-bar" id="eq6"></div>
+                    <div class="eq-bar" id="eq7"></div>
+                    <div class="eq-bar" id="eq8"></div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="pixel-btn btn-green" style="flex:1" id="playMusicBtn" onclick="toggleChiptune()">▶ PLAY LOOP</button>
+                    <button class="pixel-btn" onclick="triggerArpeggio()">🎶 SOLI</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4: ARK Pixel Breeding Lab -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>PINK_THORN_INCUBATOR</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div class="incubator-box">
+                    <div class="egg-sprite" id="dinoEgg" onclick="hatchEgg()">🥚</div>
+                    <div id="dinoStatus" style="font-family:'Silkscreen'; font-size:12px; color:var(--slime-green);">
+                        CLICK EGG TO INCUBATE
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-size: 16px;" id="dinoLog">
+                    > Ready to roll stat mutations...
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="pixel-btn" onclick="playBeep(400, 0.05)">👾 BLOOM_START</button>
+        <div class="taskbar-clock" id="pixelClock">12:00 AM</div>
+    </div>
+
+    <script>
+        // --- Web Audio API Synth Engine ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playBeep(freq, duration) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // --- CRT Toggle ---
+        function toggleCRT() {
+            const crt = document.getElementById('crtOverlay');
+            crt.style.display = crt.style.display === 'none' ? 'block' : 'none';
+            playBeep(800, 0.05);
+        }
+
+        // --- Tamagotchi Logic ---
+        let happy = 80;
+        let full = 50;
+
+        function updatePetStats() {
+            document.getElementById('happyVal').innerText = happy + '%';
+            document.getElementById('happyBar').style.width = happy + '%';
+            document.getElementById('fullVal').innerText = full + '%';
+            document.getElementById('fullBar').style.width = full + '%';
+        }
+
+        function createFloatingHeart(e) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerText = '💖';
+            heart.style.left = (e.clientX || 100) + 'px';
+            heart.style.top = (e.clientY || 100) + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        }
+
+        function patCat(e) {
+            happy = Math.min(100, happy + 10);
+            updatePetStats();
+            playBeep(523.25, 0.1);
+            createFloatingHeart(e);
+            showBubble('Purrr~ 🐾');
+        }
+
+        function feedCat(e) {
+            full = Math.min(100, full + 20);
+            updatePetStats();
+            playBeep(659.25, 0.1);
+            createFloatingHeart(e);
+            showBubble('Nom nom! 🐟');
+        }
+
+        function playCat(e) {
+            happy = Math.min(100, happy + 15);
+            full = Math.max(0, full - 5);
+            updatePetStats();
+            playBeep(783.99, 0.15);
+            createFloatingHeart(e);
+            showBubble('Catch it! 🔴');
+        }
+
+        function showBubble(text) {
+            const bubble = document.getElementById('speechBubble');
+            bubble.innerText = text;
+            bubble.style.display = 'block';
+            setTimeout(() => bubble.style.display = 'none', 1500);
+        }
+
+        // --- Pixel Canvas Game ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let playerX = 130;
+        let score = 0;
+        let skullY = 0;
+        let skullX = Math.random() * 260;
+
+        function drawGame() {
+            ctx.fillStyle = '#0d0b10';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Player (Green Pixel Square)
+            ctx.fillStyle = '#00ff99';
+            ctx.fillRect(playerX, 150, 20, 20);
+
+            // Falling Skull (Pink Pixel)
+            ctx.fillStyle = '#ff66b2';
+            ctx.fillRect(skullX, skullY, 15, 15);
+
+            skullY += 2;
+            if (skullY > 180) {
+                skullY = 0;
+                skullX = Math.random() * 260;
+                score += 10;
+                document.getElementById('gameScore').innerText = score;
+                playBeep(880, 0.05);
+            }
+
+            requestAnimationFrame(drawGame);
+        }
+
+        function movePlayer(dir) {
+            playerX = Math.max(0, Math.min(260, playerX + dir));
+            playBeep(300, 0.03);
+        }
+
+        drawGame();
+
+        // --- Chiptune Loop Engine ---
+        let isPlayingMusic = false;
+        let musicInterval;
+
+        function toggleChiptune() {
+            const btn = document.getElementById('playMusicBtn');
+            if (isPlayingMusic) {
+                clearInterval(musicInterval);
+                isPlayingMusic = false;
+                btn.innerText = '▶ PLAY LOOP';
+                resetEQ();
+            } else {
+                isPlayingMusic = true;
+                btn.innerText = '⏸ PAUSE';
+                const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+                let noteIdx = 0;
+                musicInterval = setInterval(() => {
+                    playBeep(notes[noteIdx], 0.1);
+                    noteIdx = (noteIdx + 1) % notes.length;
+                    animateEQ();
+                }, 200);
+            }
+        }
+
+        function animateEQ() {
+            for (let i = 1; i <= 8; i++) {
+                const height = Math.floor(Math.random() * 80) + 20;
+                document.getElementById('eq' + i).style.height = height + '%';
+            }
+        }
+
+        function resetEQ() {
+            for (let i = 1; i <= 8; i++) {
+                document.getElementById('eq' + i).style.height = '20%';
+            }
+        }
+
+        function triggerArpeggio() {
+            const arpeggio = [523.25, 659.25, 783.99, 1046.50];
+            arpeggio.forEach((freq, idx) => {
+                setTimeout(() => playBeep(freq, 0.08), idx * 80);
+            });
+        }
+
+        // --- ARK Mutant Hatchery ---
+        function hatchEgg() {
+            const egg = document.getElementById('dinoEgg');
+            const status = document.getElementById('dinoStatus');
+            const log = document.getElementById('dinoLog');
+
+            playBeep(150, 0.1);
+            egg.style.transform = 'scale(1.3)';
+            setTimeout(() => egg.style.transform = 'scale(1)', 150);
+
+            const mutations = [
+                "MUTATION! Neon Pink Rex [Melee +2]",
+                "MUTATION! Toxic Slime Wyvern [Health +2]",
+                "MUTATION! G59 Void Spino [Stamina +2]",
+                "Clean Stat Roll [No Color Mutation]"
+            ];
+
+            const result = mutations[Math.floor(Math.random() * mutations.length)];
+            status.innerText = "HATCHED!";
+            log.innerHTML = `> <span style="color:var(--pink-hot)">${result}</span>`;
+            playBeep(900, 0.2);
+        }
+
+        // --- Live Clock ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('pixelClock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
