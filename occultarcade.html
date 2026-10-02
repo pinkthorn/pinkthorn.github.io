@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ BLOOMIE'S ARCADE & OCCULT PLAYGROUND v3.0 ⚡</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredoka:wght@400;500;600;700&family=Press+Start+2P&family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#0b0810',
+                        voidCard: '#130e1d',
+                        voidDark: '#060408',
+                        hotPink: '#ff66b2',
+                        deepPink: '#ff007f',
+                        slimeGreen: '#00ff99',
+                        acidGreen: '#aaff00',
+                        glitchYellow: '#ffe600',
+                        gothPurple: '#2d183e',
+                        deepGoth: '#170b22',
+                        lavender: '#c084fc',
+                        darkBorder: '#3f215d'
+                    },
+                    fontFamily: {
+                        pixel: ['"Press Start 2P"', 'cursive'],
+                        retro: ['VT323', 'monospace'],
+                        cute: ['Fredoka', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                        creepy: ['Creepster', 'cursive']
+                    },
+                    boxShadow: {
+                        'pink-glow': '0 0 15px rgba(255, 102, 178, 0.5), inset 0 0 10px rgba(255, 102, 178, 0.2)',
+                        'green-glow': '0 0 15px rgba(0, 255, 153, 0.5)',
+                        'purple-glow': '0 0 20px rgba(192, 132, 252, 0.4)',
+                        'yellow-glow': '0 0 15px rgba(255, 230, 0, 0.5)',
+                        'window-pink': '5px 5px 0px #ff66b2',
+                        'window-green': '5px 5px 0px #00ff99',
+                        'window-purple': '5px 5px 0px #c084fc'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0810;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff66b2;
+            border-radius: 4px;
+            border: 1px solid #0b0810;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff99;
+        }
+
+        /* Hypnotic Spiral Animation */
+        .spiral-bg {
+            background: radial-gradient(circle, repeating-conic-gradient(#ff66b2 0 15deg, #0b0810 15deg 30deg));
+            animation: spinSpiral 35s linear infinite;
+            opacity: 0.08;
+        }
+
+        @keyframes spinSpiral {
+            0% { transform: scale(3.5) rotate(0deg); }
+            100% { transform: scale(3.5) rotate(360deg); }
+        }
+
+        /* Floating Animation Elements */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        .floating {
+            animation: floatSlow 3.5s ease-in-out infinite;
+        }
+
+        /* CRT Scanline Overlay */
+        .crt-overlay::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 9990;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Screen Glitch Effect on Mutation */
+        .glitch-flash {
+            animation: glitchAnim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        @keyframes glitchAnim {
+            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            20% { transform: translate(-5px, 5px); filter: hue-rotate(90deg); }
+            40% { transform: translate(-5px, -5px); filter: invert(0.8); }
+            60% { transform: translate(5px, 5px); filter: hue-rotate(180deg); }
+            80% { transform: translate(5px, -5px); filter: contrast(200%); }
+            100% { transform: translate(0); filter: hue-rotate(0deg); }
+        }
+
+        /* Sound Pad Active Pulse */
+        .pad-active {
+            transform: scale(0.92);
+            box-shadow: 0 0 25px #00ff99, inset 0 0 15px #ffffff !important;
+            border-color: #ffffff !important;
+        }
+
+        /* Floating Cursor Pet */
+        #bloomiePet {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.12s ease-out;
+        }
+
+        /* Dynamic Theme Variables Class Presets */
+        .theme-pink {
+            --primary: #ff66b2;
+            --secondary: #ff007f;
+            --accent: #ffe600;
+        }
+        .theme-toxic {
+            --primary: #00ff99;
+            --secondary: #aaff00;
+            --accent: #ff66b2;
+        }
+        .theme-grey {
+            --primary: #94a3b8;
+            --secondary: #475569;
+            --accent: #ff007f;
+        }
+        .theme-whimsigoth {
+            --primary: #c084fc;
+            --secondary: #3b0764;
+            --accent: #00ff99;
+        }
+    </style>
+</head>
+
+<body class="bg-void text-gray-200 font-cute selection:bg-hotPink selection:text-black min-h-screen relative overflow-x-hidden select-none crt-overlay" id="appBody">
+
+    <!-- FX & Particle Layer -->
+    <canvas id="fxCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-[9995]"></canvas>
+
+    <!-- Hypnotic Spiral Layer -->
+    <div id="spiralOverlay" class="fixed inset-0 spiral-bg pointer-events-none z-0 transition-opacity duration-500"></div>
+
+    <!-- Floating Cursor Avatar Companion -->
+    <div id="bloomiePet" class="flex flex-col items-center">
+        <div id="petSpeech" class="bg-voidCard border border-hotPink text-hotPink font-pixel text-[9px] px-2 py-1 rounded-lg mb-1 shadow-pink-glow opacity-0 transition-opacity duration-200 whitespace-nowrap">
+            Y2K CHAOS DETECTED! 🦇
+        </div>
+        <div class="text-4xl floating filter drop-shadow-[0_0_8px_rgba(255,102,178,0.8)] cursor-pointer pointer-events-auto" onclick="petAvatarClick()">
+            🦇
+        </div>
+    </div>
+
+    <!-- MAIN NAVIGATION TOPBAR -->
+    <header class="relative z-20 bg-voidCard/90 border-b-2 border-hotPink/50 px-4 py-3 backdrop-blur-md sticky top-0 flex flex-wrap items-center justify-between gap-3 shadow-pink-glow">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-hotPink to-gothPurple border border-hotPink flex items-center justify-center text-2xl shadow-pink-glow">
+                🦇
+            </div>
+            <div>
+                <h1 class="font-creepy text-2xl md:text-3xl text-hotPink tracking-wider leading-none">BLOOMIE'S ARCADE</h1>
+                <p class="font-pixel text-[9px] text-slimeGreen tracking-widest mt-0.5">OCCULT PLAYGROUND v3.0 // G59 & GUROKAWAII</p>
+            </div>
+        </div>
+
+        <!-- Module Selection Tabs -->
+        <nav class="flex items-center gap-1.5 overflow-x-auto py-1 max-w-full">
+            <button onclick="switchTab('tab-dinos')" id="btn-tab-dinos" class="tab-btn active px-3 py-1.5 rounded-xl font-pixel text-[10px] bg-hotPink text-black font-bold border border-hotPink transition flex items-center gap-1.5 shadow-pink-glow">
+                <span>🦖</span> ARK Mutator
+            </button>
+            <button onclick="switchTab('tab-coffee')" id="btn-tab-coffee" class="tab-btn px-3 py-1.5 rounded-xl font-pixel text-[10px] bg-voidDark text-gray-400 border border-darkBorder hover:text-hotPink transition flex items-center gap-1.5">
+                <span>☕</span> Caffeine Lab
+            </button>
+            <button onclick="switchTab('tab-synth')" id="btn-tab-synth" class="tab-btn px-3 py-1.5 rounded-xl font-pixel text-[10px] bg-voidDark text-gray-400 border border-darkBorder hover:text-slimeGreen transition flex items-center gap-1.5">
+                <span>🎹</span> Hex Synth
+            </button>
+            <button onclick="switchTab('tab-cats')" id="btn-tab-cats" class="tab-btn px-3 py-1.5 rounded-xl font-pixel text-[10px] bg-voidDark text-gray-400 border border-darkBorder hover:text-glitchYellow transition flex items-center gap-1.5">
+                <span>🐈‍⬛</span> Cat Catcher
+            </button>
+            <button onclick="switchTab('tab-crystal')" id="btn-tab-crystal" class="tab-btn px-3 py-1.5 rounded-xl font-pixel text-[10px] bg-voidDark text-gray-400 border border-darkBorder hover:text-lavender transition flex items-center gap-1.5">
+                <span>🔮</span> Crystals & Themes
+            </button>
+        </nav>
+
+        <!-- System Controls -->
+        <div class="flex items-center gap-2 font-mono text-xs">
+            <button onclick="toggleCRT()" class="p-2 bg-gothPurple border border-hotPink/40 rounded-xl hover:bg-hotPink hover:text-black transition text-[11px]" title="Toggle CRT Overlay">
+                📺 CRT
+            </button>
+            <button onclick="toggleSpiral()" class="p-2 bg-gothPurple border border-slimeGreen/40 rounded-xl hover:bg-slimeGreen hover:text-black transition text-[11px]" title="Toggle Spiral">
+                🌀 HYPNO
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER AREA FOR MODULES -->
+    <main class="relative z-10 max-w-7xl mx-auto p-4 md:p-6 pb-20">
+
+        <!-- MODULE 1: ARK DINOS AFTER DARK BREEDING MUTATOR -->
+        <section id="tab-dinos" class="module-tab space-y-6">
+            <div class="bg-voidCard border-2 border-hotPink/60 rounded-2xl p-4 md:p-6 shadow-pink-glow space-y-6">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-darkBorder pb-4">
+                    <div>
+                        <h2 class="font-pixel text-base text-hotPink flex items-center gap-2">
+                            <span>🦖</span> PINK THORN TRADING CO. // DINO BREEDING LAB
+                        </h2>
+                        <p class="font-mono text-xs text-gray-400 mt-1">Simulate high-mutation colorlines & stats for ARK: Survival Ascended.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="triggerDinoMutation()" class="px-4 py-2 bg-gradient-to-r from-hotPink via-deepPink to-slimeGreen text-black font-pixel text-xs rounded-xl shadow-window-pink hover:scale-105 active:scale-95 transition font-bold">
+                            💥 TRIGGER MUTATION BURST
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Dinosaur Preview Canvas & Controls -->
+                    <div class="lg:col-span-7 bg-voidDark border border-darkBorder rounded-2xl p-4 space-y-4 flex flex-col justify-between">
+                        <div class="relative bg-black/80 rounded-xl border border-hotPink/30 h-72 flex items-center justify-center overflow-hidden" id="dinoStage">
+                            <canvas id="dinoCanvas" class="w-full h-full"></canvas>
+                            
+                            <div class="absolute top-3 left-3 bg-voidCard/80 border border-slimeGreen/40 px-3 py-1 rounded-lg font-mono text-xs text-slimeGreen">
+                                Specimen: <span id="dinoSpecimenName" class="font-bold text-white">Pink Thorn Rex</span>
+                            </div>
+
+                            <div class="absolute bottom-3 right-3 flex gap-2">
+                                <span id="mutBadge" class="px-2.5 py-1 bg-hotPink text-black font-pixel text-[9px] rounded-lg shadow-pink-glow">
+                                    MUTATION COUNT: 254/254
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Species Selector -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-pixel text-[9px]">
+                            <button onclick="selectDinoSpecies('rex')" class="p-2 rounded-xl bg-gothPurple border border-hotPink text-hotPink hover:bg-hotPink hover:text-black transition">
+                                🦖 T-REX
+                            </button>
+                            <button onclick="selectDinoSpecies('spino')" class="p-2 rounded-xl bg-voidDark border border-darkBorder text-gray-300 hover:border-slimeGreen hover:text-slimeGreen transition">
+                                🐊 SPINO
+                            </button>
+                            <button onclick="selectDinoSpecies('wyvern')" class="p-2 rounded-xl bg-voidDark border border-darkBorder text-gray-300 hover:border-lavender hover:text-lavender transition">
+                                🐉 WYVERN
+                            </button>
+                            <button onclick="selectDinoSpecies('megalo')" class="p-2 rounded-xl bg-voidDark border border-darkBorder text-gray-300 hover:border-glitchYellow hover:text-glitchYellow transition">
+                                🦇 MEGALO
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Color Region Controls & Stat Rolls -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="bg-voidDark border border-darkBorder rounded-2xl p-4 space-y-3">
+                            <h3 class="font-pixel text-xs text-slimeGreen">🎨 Color Region Mutations</h3>
+                            
+                            <div class="space-y-2 font-mono text-xs">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Region 0 (Body Primary):</span>
+                                    <input type="color" id="colRegion0" value="#ff66b2" onchange="updateDinoColors()" class="w-8 h-8 rounded border-none cursor-pointer bg-transparent">
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Region 1 (Spine Stripes):</span>
+                                    <input type="color" id="colRegion1" value="#00ff99" onchange="updateDinoColors()" class="w-8 h-8 rounded border-none cursor-pointer bg-transparent">
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Region 2 (Belly Accent):</span>
+                                    <input type="color" id="colRegion2" value="#c084fc" onchange="updateDinoColors()" class="w-8 h-8 rounded border-none cursor-pointer bg-transparent">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stat Mutation Generator -->
+                        <div class="bg-voidDark border border-darkBorder rounded-2xl p-4 space-y-3">
+                            <h3 class="font-pixel text-xs text-lavender">📊 Bred Stat Rollouts</h3>
+                            
+                            <div class="space-y-2 font-mono text-xs">
+                                <div>
+                                    <div class="flex justify-between text-gray-300 mb-1">
+                                        <span>Health Mutation:</span> <span id="statHpText" class="text-hotPink font-bold">18,400 HP (254 pts)</span>
+                                    </div>
+                                    <div class="w-full bg-black rounded-full h-2 overflow-hidden border border-hotPink/30">
+                                        <div id="statHpBar" class="bg-hotPink h-full w-[95%]"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-gray-300 mb-1">
+                                        <span>Melee Damage:</span> <span id="statMeleeText" class="text-slimeGreen font-bold">1,450% (240 pts)</span>
+                                    </div>
+                                    <div class="w-full bg-black rounded-full h-2 overflow-hidden border border-slimeGreen/30">
+                                        <div id="statMeleeBar" class="bg-slimeGreen h-full w-[88%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Copy Trading Co Flyer Button -->
+                        <button onclick="generateShopFlyer()" class="w-full py-3 bg-gothPurple border border-hotPink text-hotPink font-pixel text-xs rounded-xl hover:bg-hotPink hover:text-black transition shadow-pink-glow">
+                            📜 GENERATE SHOP FLYER LAYOUT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 2: COFFEE & VOID CAFFEINE LAB -->
+        <section id="tab-coffee" class="module-tab space-y-6 hidden">
+            <div class="bg-voidCard border-2 border-slimeGreen/60 rounded-2xl p-4 md:p-6 shadow-green-glow space-y-6">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-darkBorder pb-4">
+                    <div>
+                        <h2 class="font-pixel text-base text-slimeGreen flex items-center gap-2">
+                            <span>☕</span> BLOOMIE'S VOID CAFFEINE LAB & BARISTA SIM
+                        </h2>
+                        <p class="font-mono text-xs text-gray-400 mt-1">Craft hyper-caffeinated potions with syrup, toppings, and skull ice cubes.</p>
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs bg-black/60 px-3 py-1.5 rounded-xl border border-slimeGreen/40">
+                        <span class="text-gray-400">Total Brews:</span>
+                        <span id="brewCounter" class="text-slimeGreen font-bold">0</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Interactive Mug Canvas & Visualizer -->
+                    <div class="lg:col-span-5 bg-voidDark border border-darkBorder rounded-2xl p-6 text-center space-y-4 flex flex-col justify-center items-center">
+                        <div class="relative w-48 h-64 border-4 border-slimeGreen/60 rounded-b-full rounded-t-lg bg-black/60 overflow-hidden flex flex-col justify-end p-2 shadow-green-glow" id="coffeeCup">
+                            
+                            <!-- Liquid Layers -->
+                            <div id="layerTopping" class="w-full transition-all duration-300 bg-pink-300/80 h-0 flex items-center justify-center font-pixel text-[8px] text-black"></div>
+                            <div id="layerEspresso" class="w-full transition-all duration-300 bg-amber-950 h-16 flex items-center justify-center font-pixel text-[8px] text-amber-200">VOID ESPRESSO</div>
+                            <div id="layerBase" class="w-full transition-all duration-300 bg-amber-900 h-24 flex items-center justify-center font-pixel text-[8px] text-amber-300">OAT MILK BASE</div>
+
+                            <!-- Floating Topping Icons -->
+                            <div id="cupFloatingIcons" class="absolute inset-0 pointer-events-none flex flex-wrap justify-center items-center gap-1 p-4"></div>
+                        </div>
+
+                        <div class="w-full space-y-1">
+                            <h3 id="drinkNameDisplay" class="font-pixel text-xs text-slimeGreen truncate">G59 VOID ESPRESSO SPECIAL</h3>
+                            <div class="font-mono text-[11px] text-gray-400 flex justify-between px-4">
+                                <span>Caffeine Meter:</span>
+                                <span id="caffeineMeterText" class="text-hotPink font-bold">320mg (⚡ CRITICAL)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drag/Click Ingredient Controls -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            
+                            <!-- Ingredient Buttons -->
+                            <button onclick="addCoffeeIngredient('syrup-pink')" class="p-3 bg-voidDark border border-darkBorder hover:border-hotPink rounded-xl text-left space-y-1 transition group">
+                                <span class="text-2xl block">🌸</span>
+                                <span class="font-pixel text-[10px] text-hotPink block">Pink Dragon Syrup</span>
+                                <span class="font-mono text-[9px] text-gray-400 block">+60mg Caffeine</span>
+                            </button>
+
+                            <button onclick="addCoffeeIngredient('syrup-slime')" class="p-3 bg-voidDark border border-darkBorder hover:border-slimeGreen rounded-xl text-left space-y-1 transition group">
+                                <span class="text-2xl block">🧪</span>
+                                <span class="font-pixel text-[10px] text-slimeGreen block">Toxic Lime Drizzle</span>
+                                <span class="font-mono text-[9px] text-gray-400 block">+80mg Caffeine</span>
+                            </button>
+
+                            <button onclick="addCoffeeIngredient('skulls')" class="p-3 bg-voidDark border border-darkBorder hover:border-lavender rounded-xl text-left space-y-1 transition group">
+                                <span class="text-2xl block">💀</span>
+                                <span class="font-pixel text-[10px] text-lavender block">Obsidian Skull Ice</span>
+                                <span class="font-mono text-[9px] text-gray-400 block">Chill Vibes</span>
+                            </button>
+
+                            <button onclick="addCoffeeIngredient('agate')" class="p-3 bg-voidDark border border-darkBorder hover:border-glitchYellow rounded-xl text-left space-y-1 transition group">
+                                <span class="text-2xl block">✨</span>
+                                <span class="font-pixel text-[10px] text-glitchYellow block">Flower Agate Dust</span>
+                                <span class="font-mono text-[9px] text-gray-400 block">Spiritual Clarity</span>
+                            </button>
+
+                            <button onclick="addCoffeeIngredient('whip')" class="p-3 bg-voidDark border border-darkBorder hover:border-white rounded-xl text-left space-y-1 transition group">
+                                <span class="text-2xl block">🍦</span>
+                                <span class="font-pixel text-[10px] text-white block">Goth Whipped Cream</span>
+                                <span class="font-mono text-[9px] text-gray-400 block">+100 Calories</span>
+                            </button>
+
+                            <button onclick="resetCoffee()" class="p-3 bg-red-950 border border-red-500/50 hover:bg-red-900 rounded-xl text-left space-y-1 transition">
+                                <span class="text-2xl block">🗑️</span>
+                                <span class="font-pixel text-[10px] text-red-300 block">Dump Cup</span>
+                                <span class="font-mono text-[9px] text-gray-400 block">Start Fresh</span>
+                            </button>
+                        </div>
+
+                        <!-- Generated Recipe Card Result -->
+                        <div id="recipeCard" class="bg-voidDark border border-slimeGreen/40 p-4 rounded-xl font-mono text-xs space-y-2">
+                            <div class="flex justify-between items-center text-slimeGreen font-pixel text-[10px]">
+                                <span>RECIPE CARD #049</span>
+                                <span>VERIFIED CAFFEINATED</span>
+                            </div>
+                            <p id="recipeFlavorNotes" class="text-gray-300 italic">"Dark roast espresso infused with pink sugar clouds and skull-shaped ice. Tastes like $uicideboy$ album drops."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 3: HEX & GLITCH SOUND MACHINE -->
+        <section id="tab-synth" class="module-tab space-y-6 hidden">
+            <div class="bg-voidCard border-2 border-slimeGreen/60 rounded-2xl p-4 md:p-6 shadow-green-glow space-y-6">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-darkBorder pb-4">
+                    <div>
+                        <h2 class="font-pixel text-base text-slimeGreen flex items-center gap-2">
+                            <span>🎹</span> HEX & GLITCH 16-PAD SYNTH SOUNDBOARD
+                        </h2>
+                        <p class="font-mono text-xs text-gray-400 mt-1">Live Web Audio API synthesizer, 8-bit chiptune triggers & visualizer.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleAudioEngine()" id="audioPowerBtn" class="px-4 py-2 bg-slimeGreen text-black font-pixel text-xs rounded-xl font-bold shadow-green-glow hover:scale-105 transition">
+                            🔊 AUDIO POWER: ON
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Equalizer Visualizer Canvas -->
+                <div class="bg-black/90 rounded-2xl border border-slimeGreen/40 h-24 p-2 flex items-end justify-center gap-1 overflow-hidden" id="synthVisualizer">
+                    <!-- Bars inserted dynamically -->
+                </div>
+
+                <!-- 16-Pad Grid -->
+                <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-3" id="soundGrid">
+                    <!-- Pads generated in JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 4: FAMILIAR CHAOS / LUCIFER & OZZIE TOWER DEFENSE / CATCH -->
+        <section id="tab-cats" class="module-tab space-y-6 hidden">
+            <div class="bg-voidCard border-2 border-glitchYellow/60 rounded-2xl p-4 md:p-6 shadow-yellow-glow space-y-6">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-darkBorder pb-4">
+                    <div>
+                        <h2 class="font-pixel text-base text-glitchYellow flex items-center gap-2">
+                            <span>🐈‍⬛</span> LUCIFER & OZZIE'S TUNA TREAT CATCHER
+                        </h2>
+                        <p class="font-mono text-xs text-gray-400 mt-1">Catch falling tuna treats & crystal spheres! Avoid the water spray bottles!</p>
+                    </div>
+                    <div class="flex items-center gap-4 font-mono text-xs">
+                        <div class="bg-black/80 border border-glitchYellow/40 px-3 py-1.5 rounded-xl">
+                            SCORE: <span id="catGameScore" class="text-glitchYellow font-bold font-pixel">0</span>
+                        </div>
+                        <button onclick="startCatGame()" id="btnStartCatGame" class="px-4 py-2 bg-glitchYellow text-black font-pixel text-xs rounded-xl font-bold shadow-yellow-glow hover:scale-105 transition">
+                            ▶ START GAME
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Canvas Box -->
+                <div class="relative w-full h-96 bg-voidDark border-2 border-glitchYellow/40 rounded-2xl overflow-hidden" id="catGameContainer">
+                    <canvas id="catCanvas" class="w-full h-full block"></canvas>
+                    
+                    <div id="catGameOverOverlay" class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center space-y-3 hidden">
+                        <h3 class="font-creepy text-4xl text-hotPink">GAME OVER!</h3>
+                        <p class="font-pixel text-xs text-glitchYellow">FINAL TUNA SCORE: <span id="finalScoreText">0</span></p>
+                        <button onclick="startCatGame()" class="px-4 py-2 bg-slimeGreen text-black font-pixel text-xs rounded-xl font-bold">
+                            TRY AGAIN 🐟
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 5: OBSIDIAN LIGHTER MOOD LOG & CRYSTAL SPELLBOOK -->
+        <section id="tab-crystal" class="module-tab space-y-6 hidden">
+            <div class="bg-voidCard border-2 border-lavender/60 rounded-2xl p-4 md:p-6 shadow-purple-glow space-y-6">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-darkBorder pb-4">
+                    <div>
+                        <h2 class="font-pixel text-base text-lavender flex items-center gap-2">
+                            <span>🔮</span> CRYSTAL SPELLBOOK & DASHBOARD THEME ENGINE
+                        </h2>
+                        <p class="font-mono text-xs text-gray-400 mt-1">Interactive 3D crystal vault and instant full-app aesthetic skin selector.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Interactive 3D Crystal Sphere Viewer -->
+                    <div class="lg:col-span-6 bg-voidDark border border-darkBorder rounded-2xl p-4 text-center space-y-3">
+                        <h3 class="font-pixel text-xs text-lavender">💎 3D Crystal Sphere Viewer</h3>
+                        <div class="relative h-64 bg-black/60 rounded-xl border border-lavender/30 flex items-center justify-center overflow-hidden">
+                            <canvas id="crystalCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+                            <div class="absolute bottom-2 left-2 font-mono text-[10px] text-gray-400 bg-black/80 px-2 py-1 rounded">
+                                Drag to rotate crystal sphere
+                            </div>
+                        </div>
+
+                        <!-- Crystal Picker -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-pixel text-[9px]">
+                            <button onclick="selectCrystal('flower')" class="p-2 bg-gothPurple border border-hotPink text-hotPink rounded-xl hover:bg-hotPink hover:text-black transition">
+                                🌸 Flower Agate
+                            </button>
+                            <button onclick="selectCrystal('fluorite')" class="p-2 bg-voidDark border border-slimeGreen text-slimeGreen rounded-xl hover:bg-slimeGreen hover:text-black transition">
+                                🟢 Fluorite
+                            </button>
+                            <button onclick="selectCrystal('fire')" class="p-2 bg-voidDark border border-deepPink text-deepPink rounded-xl hover:bg-deepPink hover:text-white transition">
+                                🔥 Fire Quartz
+                            </button>
+                            <button onclick="selectCrystal('jasper')" class="p-2 bg-voidDark border border-lavender text-lavender rounded-xl hover:bg-lavender hover:text-black transition">
+                                🌊 Ocean Jasper
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Global Theme Skin Switcher -->
+                    <div class="lg:col-span-6 bg-voidDark border border-darkBorder rounded-2xl p-4 space-y-4">
+                        <h3 class="font-pixel text-xs text-hotPink">🎨 Full Dashboard Theme Skins</h3>
+                        <p class="font-mono text-xs text-gray-300">Instantly switch color palettes for the entire playground:</p>
+
+                        <div class="space-y-2 font-pixel text-[10px]">
+                            <button onclick="setGlobalTheme('pink')" class="w-full p-3 bg-gradient-to-r from-hotPink to-deepGoth text-black rounded-xl border border-hotPink flex justify-between items-center hover:opacity-90 transition">
+                                <span>🌸 GUROKAWAII PINK MODE</span>
+                                <span class="font-mono text-[10px]">#ff66b2</span>
+                            </button>
+
+                            <button onclick="setGlobalTheme('toxic')" class="w-full p-3 bg-gradient-to-r from-slimeGreen to-deepGoth text-black rounded-xl border border-slimeGreen flex justify-between items-center hover:opacity-90 transition">
+                                <span>🧪 TOXIC SLIME MODE</span>
+                                <span class="font-mono text-[10px]">#00ff99</span>
+                            </button>
+
+                            <button onclick="setGlobalTheme('grey')" class="w-full p-3 bg-gradient-to-r from-slate-600 to-deepGoth text-white rounded-xl border border-slate-400 flex justify-between items-center hover:opacity-90 transition">
+                                <span>💀 G59 SUICIDEBOYZ GREY</span>
+                                <span class="font-mono text-[10px]">#94a3b8</span>
+                            </button>
+
+                            <button onclick="setGlobalTheme('whimsigoth')" class="w-full p-3 bg-gradient-to-r from-lavender to-deepGoth text-black rounded-xl border border-lavender flex justify-between items-center hover:opacity-90 transition">
+                                <span>🔮 WHIMSIGOTH MIDNIGHT</span>
+                                <span class="font-mono text-[10px]">#c084fc</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* ==========================================================================
+           1. GLOBAL APP STATE & NAVIGATION
+           ========================================================================== */
+        let currentTheme = 'pink';
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.module-tab').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-hotPink', 'bg-slimeGreen', 'bg-glitchYellow', 'bg-lavender', 'text-black', 'font-bold', 'shadow-pink-glow', 'shadow-green-glow');
+                el.classList.add('bg-voidDark', 'text-gray-400');
+            });
+
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) targetTab.classList.remove('hidden');
+
+            const btn = document.getElementById(`btn-${tabId}`);
+            if (btn) {
+                btn.classList.remove('bg-voidDark', 'text-gray-400');
+                btn.classList.add('bg-hotPink', 'text-black', 'font-bold', 'shadow-pink-glow');
+            }
+
+            // Trigger Canvas Resizes on Tab Switch
+            if (tabId === 'tab-dinos') drawDino();
+            if (tabId === 'tab-cats') resizeCatCanvas();
+            if (tabId === 'tab-crystal') drawCrystal();
+        }
+
+        /* CRT Scanline & Spiral Toggles */
+        function toggleCRT() {
+            document.body.classList.toggle('crt-overlay');
+        }
+
+        function toggleSpiral() {
+            const spiral = document.getElementById('spiralOverlay');
+            spiral.style.opacity = spiral.style.opacity === '0' ? '0.08' : '0';
+        }
+
+        /* Floating Cursor Companion Logic */
+        const pet = document.getElementById('bloomiePet');
+        const speech = document.getElementById('petSpeech');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let petX = mouseX;
+        let petY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function updatePetPosition() {
+            petX += (mouseX - petX + 25) * 0.08;
+            petY += (mouseY - petY + 25) * 0.08;
+            pet.style.left = `${petX}px`;
+            pet.style.top = `${petY}px`;
+            requestAnimationFrame(updatePetPosition);
+        }
+        updatePetPosition();
+
+        const SPEECHES = [
+            "MUTATED REX LOOKS SICK! 🦖",
+            "G59 TILL THE GRAVE! 💀",
+            "BREW MORE VOID COFFEE! ☕",
+            "CATCH THAT TUNA TREAT! 🐟",
+            "SPOOKY CUTIE VIBES ✨"
+        ];
+
+        function petAvatarClick() {
+            speech.innerText = SPEECHES[Math.floor(Math.random() * SPEECHES.length)];
+            speech.style.opacity = '1';
+            spawnParticles(petX, petY, 15);
+            setTimeout(() => { speech.style.opacity = '0'; }, 2200);
+        }
+
+        /* ==========================================================================
+           2. CANVAS PARTICLES SYSTEM
+           ========================================================================== */
+        const fxCanvas = document.getElementById('fxCanvas');
+        const fxCtx = fxCanvas.getContext('2d');
+        let particles = [];
+
+        function resizeFxCanvas() {
+            fxCanvas.width = window.innerWidth;
+            fxCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeFxCanvas);
+        resizeFxCanvas();
+
+        const SYMBOLS = ['✨', '🦇', '💀', '💖', '🧪', '⚡', '🖤', '🦕'];
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                this.size = Math.random() * 16 + 12;
+                this.vx = (Math.random() - 0.5) * 6;
+                this.vy = (Math.random() - 0.5) * 6 - 2;
+                this.alpha = 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.02;
+            }
+
+            draw() {
+                fxCtx.save();
+                fxCtx.globalAlpha = Math.max(0, this.alpha);
+                fxCtx.font = `${this.size}px sans-serif`;
+                fxCtx.fillText(this.symbol, this.x, this.y);
+                fxCtx.restore();
+            }
+        }
+
+        function spawnParticles(x, y, count = 10) {
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function animateParticles() {
+            fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        /* ==========================================================================
+           3. MODULE 1: ARK DINOS BREEDING CANVASES
+           ========================================================================== */
+        const dinoCanvas = document.getElementById('dinoCanvas');
+        const dinoCtx = dinoCanvas.getContext('2d');
+
+        let currentSpecies = 'rex';
+        let dinoColors = {
+            r0: '#ff66b2',
+            r1: '#00ff99',
+            r2: '#c084fc'
+        };
+
+        function selectDinoSpecies(species) {
+            currentSpecies = species;
+            const names = {
+                rex: 'Pink Thorn Rex',
+                spino: 'Astraeos Spino',
+                wyvern: 'Neon Wyvern',
+                megalo: 'Shadow Megalosaurus'
+            };
+            document.getElementById('dinoSpecimenName').innerText = names[species];
+            drawDino();
+        }
+
+        function updateDinoColors() {
+            dinoColors.r0 = document.getElementById('colRegion0').value;
+            dinoColors.r1 = document.getElementById('colRegion1').value;
+            dinoColors.r2 = document.getElementById('colRegion2').value;
+            drawDino();
+        }
+
+        function triggerDinoMutation() {
+            // Glitch Effect
+            document.getElementById('appBody').classList.add('glitch-flash');
+            setTimeout(() => document.getElementById('appBody').classList.remove('glitch-flash'), 350);
+
+            // Randomize Colors
+            const randHex = () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+            dinoColors.r0 = randHex();
+            dinoColors.r1 = randHex();
+            dinoColors.r2 = randHex();
+
+            document.getElementById('colRegion0').value = dinoColors.r0;
+            document.getElementById('colRegion1').value = dinoColors.r1;
+            document.getElementById('colRegion2').value = dinoColors.r2;
+
+            // Randomize Stats
+            const hp = Math.floor(Math.random() * 8000 + 15000);
+            const melee = Math.floor(Math.random() * 600 + 1000);
+            document.getElementById('statHpText').innerText = `${hp.toLocaleString()} HP (254 pts)`;
+            document.getElementById('statMeleeText').innerText = `${melee}% (245 pts)`;
+
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 30);
+            drawDino();
+        }
+
+        function drawDino() {
+            dinoCanvas.width = dinoCanvas.parentElement.clientWidth;
+            dinoCanvas.height = dinoCanvas.parentElement.clientHeight;
+            dinoCtx.clearRect(0, 0, dinoCanvas.width, dinoCanvas.height);
+
+            const cx = dinoCanvas.width / 2;
+            const cy = dinoCanvas.height / 2;
+
+            // Draw Stylized Canvas Dino Shapes based on color regions
+            dinoCtx.save();
+            
+            // Primary Body (Region 0)
+            dinoCtx.fillStyle = dinoColors.r0;
+            dinoCtx.beginPath();
+            dinoCtx.arc(cx, cy, 65, 0, Math.PI * 2);
+            dinoCtx.fill();
+
+            // Spine / Accent (Region 1)
+            dinoCtx.fillStyle = dinoColors.r1;
+            for(let i=0; i<5; i++) {
+                dinoCtx.beginPath();
+                dinoCtx.arc(cx - 50 + (i*25), cy - 65, 12, 0, Math.PI * 2);
+                dinoCtx.fill();
+            }
+
+            // Belly / Underbelly (Region 2)
+            dinoCtx.fillStyle = dinoColors.r2;
+            dinoCtx.beginPath();
+            dinoCtx.arc(cx + 15, cy + 15, 40, 0, Math.PI * 2);
+            dinoCtx.fill();
+
+            // Eyes & Cute Details
+            dinoCtx.fillStyle = '#ffffff';
+            dinoCtx.beginPath();
+            dinoCtx.arc(cx - 20, cy - 20, 10, 0, Math.PI * 2);
+            dinoCtx.fill();
+
+            dinoCtx.fillStyle = '#000000';
+            dinoCtx.beginPath();
+            dinoCtx.arc(cx - 20, cy - 20, 5, 0, Math.PI * 2);
+            dinoCtx.fill();
+
+            dinoCtx.restore();
+        }
+
+        function generateShopFlyer() {
+            alert(`📜 PINK THORN TRADING CO. FLYER COPIED!\n\nSpecimen: ${document.getElementById('dinoSpecimenName').innerText}\nColors: ${dinoColors.r0} / ${dinoColors.r1} / ${dinoColors.r2}\nStatus: MUTATED TOP STAT LINE`);
+        }
+
+        /* ==========================================================================
+           4. MODULE 2: CAFFEINE LAB SIMULATOR
+           ========================================================================== */
+        let totalBrews = 0;
+        let caffeineMg = 320;
+
+        function addCoffeeIngredient(type) {
+            const iconsContainer = document.getElementById('cupFloatingIcons');
+            const icon = document.createElement('span');
+            icon.className = 'text-2xl floating';
+
+            if (type === 'syrup-pink') {
+                icon.innerText = '🌸';
+                caffeineMg += 60;
+            } else if (type === 'syrup-slime') {
+                icon.innerText = '🧪';
+                caffeineMg += 80;
+            } else if (type === 'skulls') {
+                icon.innerText = '💀';
+            } else if (type === 'agate') {
+                icon.innerText = '✨';
+            } else if (type === 'whip') {
+                icon.innerText = '🍦';
+            }
+
+            iconsContainer.appendChild(icon);
+            totalBrews++;
+            document.getElementById('brewCounter').innerText = totalBrews;
+            document.getElementById('caffeineMeterText').innerText = `${caffeineMg}mg (⚡ OVERLOAD)`;
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 8);
+        }
+
+        function resetCoffee() {
+            document.getElementById('cupFloatingIcons').innerHTML = '';
+            caffeineMg = 120;
+            document.getElementById('caffeineMeterText').innerText = `120mg (NORMAL)`;
+        }
+
+        /* ==========================================================================
+           5. MODULE 3: HEX SYNTH & SOUNDBOARD (WEB AUDIO API)
+           ========================================================================== */
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleAudioEngine() {
+            initAudio();
+            const btn = document.getElementById('audioPowerBtn');
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+                btn.innerText = "🔊 AUDIO POWER: ON";
+            } else {
+                audioCtx.suspend();
+                btn.innerText = "🔇 AUDIO POWER: PAUSED";
+            }
+        }
+
+        function playSynthTone(freq, type = 'sine') {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        // Build Visualizer Equalizer Bars
+        const synthVisualizer = document.getElementById('synthVisualizer');
+        for (let i = 0; i < 32; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'w-2 bg-slimeGreen h-4 transition-all duration-150 rounded-t';
+            bar.id = `eqBar-${i}`;
+            synthVisualizer.appendChild(bar);
+        }
+
+        function animateVisualizer() {
+            for (let i = 0; i < 32; i++) {
+                const bar = document.getElementById(`eqBar-${i}`);
+                if (bar) {
+                    const h = Math.floor(Math.random() * 70) + 10;
+                    bar.style.height = `${h}px`;
+                }
+            }
+        }
+        setInterval(animateVisualizer, 150);
+
+        // Populate 16 Sound Pads
+        const soundGrid = document.getElementById('soundGrid');
+        const PADS = [
+            { name: "C4 BASS", freq: 261.63, type: "sawtooth", color: "border-hotPink text-hotPink" },
+            { name: "E4 SYNTH", freq: 329.63, type: "square", color: "border-slimeGreen text-slimeGreen" },
+            { name: "G4 CHIME", freq: 392.00, type: "sine", color: "border-lavender text-lavender" },
+            { name: "B4 LEAD", freq: 493.88, type: "triangle", color: "border-glitchYellow text-glitchYellow" },
+            { name: "G59 DROP", freq: 110.00, type: "sawtooth", color: "border-hotPink text-hotPink" },
+            { name: "GLITCH 1", freq: 880.00, type: "square", color: "border-slimeGreen text-slimeGreen" },
+            { name: "BAT CHIRP", freq: 1200.00, type: "sine", color: "border-lavender text-lavender" },
+            { name: "MEOW FX", freq: 650.00, type: "triangle", color: "border-glitchYellow text-glitchYellow" },
+            { name: "SUB 808", freq: 60.00, type: "sine", color: "border-hotPink text-hotPink" },
+            { name: "RETRO RUN", freq: 523.25, type: "square", color: "border-slimeGreen text-slimeGreen" },
+            { name: "DARK PAD", freq: 174.61, type: "sawtooth", color: "border-lavender text-lavender" },
+            { name: "CRYSTAL", freq: 987.77, type: "sine", color: "border-glitchYellow text-glitchYellow" },
+            { name: "SPELL FX", freq: 783.99, type: "triangle", color: "border-hotPink text-hotPink" },
+            { name: "TOXIC BEAT", freq: 220.00, type: "sawtooth", color: "border-slimeGreen text-slimeGreen" },
+            { name: "VOX LOOP", freq: 440.00, type: "sine", color: "border-lavender text-lavender" },
+            { name: "8-BIT DIE", freq: 150.00, type: "square", color: "border-glitchYellow text-glitchYellow" }
+        ];
+
+        PADS.forEach((p, idx) => {
+            const btn = document.createElement('button');
+            btn.className = `p-4 bg-voidDark border-2 ${p.color} rounded-2xl font-pixel text-[9px] flex flex-col items-center justify-center gap-2 hover:scale-105 active:scale-95 transition shadow-md`;
+            btn.innerHTML = `<span>🔊</span><span>${p.name}</span>`;
+            btn.onclick = () => {
+                playSynthTone(p.freq, p.type);
+                btn.classList.add('pad-active');
+                setTimeout(() => btn.classList.remove('pad-active'), 200);
+            };
+            soundGrid.appendChild(btn);
+        });
+
+        /* ==========================================================================
+           6. MODULE 4: CAT CATCHER MINI ARCADE GAME
+           ========================================================================== */
+        const catCanvas = document.getElementById('catCanvas');
+        const catCtx = catCanvas.getContext('2d');
+        let catGameRunning = false;
+        let catScore = 0;
+
+        let playerCat = {
+            x: 200,
+            y: 300,
+            width: 50,
+            height: 40,
+            speed: 8
+        };
+
+        let fallingItems = [];
+
+        function resizeCatCanvas() {
+            if (!catCanvas.parentElement) return;
+            catCanvas.width = catCanvas.parentElement.clientWidth;
+            catCanvas.height = catCanvas.parentElement.clientHeight;
+            playerCat.y = catCanvas.height - 50;
+        }
+
+        function startCatGame() {
+            resizeCatCanvas();
+            catScore = 0;
+            fallingItems = [];
+            catGameRunning = true;
+            document.getElementById('catGameScore').innerText = '0';
+            document.getElementById('catGameOverOverlay').classList.add('hidden');
+            requestAnimationFrame(catGameLoop);
+        }
+
+        // Touch & Key Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') playerCat.x -= playerCat.speed * 3;
+            if (e.key === 'ArrowRight') playerCat.x += playerCat.speed * 3;
+        });
+
+        catCanvas.addEventListener('touchmove', (e) => {
+            const rect = catCanvas.getBoundingClientRect();
+            playerCat.x = e.touches[0].clientX - rect.left - playerCat.width / 2;
+        });
+
+        function catGameLoop() {
+            if (!catGameRunning) return;
+
+            catCtx.clearRect(0, 0, catCanvas.width, catCanvas.height);
+
+            // Spawn Items
+            if (Math.random() < 0.04) {
+                fallingItems.push({
+                    x: Math.random() * (catCanvas.width - 30),
+                    y: 0,
+                    type: Math.random() < 0.8 ? 'tuna' : 'spray',
+                    speed: Math.random() * 3 + 2
+                });
+            }
+
+            // Draw Player Cat (Lucifer)
+            catCtx.font = '36px sans-serif';
+            catCtx.fillText('🐈‍⬛', playerCat.x, playerCat.y);
+
+            // Update & Draw Items
+            for (let i = fallingItems.length - 1; i >= 0; i--) {
+                let item = fallingItems[i];
+                item.y += item.speed;
+
+                catCtx.font = '28px sans-serif';
+                catCtx.fillText(item.type === 'tuna' ? '🐟' : '💦', item.x, item.y);
+
+                // Collision Check
+                if (item.y > playerCat.y - 20 && item.x > playerCat.x - 20 && item.x < playerCat.x + playerCat.width) {
+                    if (item.type === 'tuna') {
+                        catScore += 10;
+                        document.getElementById('catGameScore').innerText = catScore;
+                        fallingItems.splice(i, 1);
+                        continue;
+                    } else {
+                        // Hit Spray Bottle -> Game Over
+                        catGameRunning = false;
+                        document.getElementById('finalScoreText').innerText = catScore;
+                        document.getElementById('catGameOverOverlay').classList.remove('hidden');
+                        return;
+                    }
+                }
+
+                if (item.y > catCanvas.height) fallingItems.splice(i, 1);
+            }
+
+            requestAnimationFrame(catGameLoop);
+        }
+
+        /* ==========================================================================
+           7. MODULE 5: 3D CRYSTAL SPHERE CANVAS & GLOBAL THEMES
+           ========================================================================== */
+        const crystalCanvas = document.getElementById('crystalCanvas');
+        const crystalCtx = crystalCanvas.getContext('2d');
+
+        let crystalAngle = 0;
+        let crystalType = 'flower';
+
+        function selectCrystal(type) {
+            crystalType = type;
+            drawCrystal();
+        }
+
+        function drawCrystal() {
+            crystalCanvas.width = crystalCanvas.parentElement.clientWidth;
+            crystalCanvas.height = crystalCanvas.parentElement.clientHeight;
+            crystalCtx.clearRect(0, 0, crystalCanvas.width, crystalCanvas.height);
+
+            const cx = crystalCanvas.width / 2;
+            const cy = crystalCanvas.height / 2;
+
+            crystalCtx.save();
+            crystalCtx.translate(cx, cy);
+            crystalCtx.rotate(crystalAngle);
+
+            // Color Palettes for Crystals
+            const colors = {
+                flower: ['#ff66b2', '#ff007f'],
+                fluorite: ['#00ff99', '#aaff00'],
+                fire: ['#ff0055', '#ffe600'],
+                jasper: ['#c084fc', '#00ff99']
+            };
+
+            const grad = crystalCtx.createRadialGradient(0, 0, 10, 0, 0, 70);
+            grad.addColorStop(0, colors[crystalType][0]);
+            grad.addColorStop(1, colors[crystalType][1]);
+
+            crystalCtx.fillStyle = grad;
+            crystalCtx.beginPath();
+            crystalCtx.arc(0, 0, 65, 0, Math.PI * 2);
+            crystalCtx.fill();
+
+            // Inner Facet Sparkles
+            crystalCtx.strokeStyle = '#ffffff';
+            crystalCtx.lineWidth = 1.5;
+            crystalCtx.beginPath();
+            crystalCtx.moveTo(-30, -30);
+            crystalCtx.lineTo(30, 30);
+            crystalCtx.moveTo(30, -30);
+            crystalCtx.lineTo(-30, 30);
+            crystalCtx.stroke();
+
+            crystalCtx.restore();
+
+            crystalAngle += 0.01;
+            requestAnimationFrame(drawCrystal);
+        }
+
+        function setGlobalTheme(themeKey) {
+            const app = document.getElementById('appBody');
+            app.className = `bg-void text-gray-200 font-cute selection:bg-hotPink selection:text-black min-h-screen relative overflow-x-hidden select-none crt-overlay theme-${themeKey}`;
+            spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 25);
+        }
+
+        /* Initial Setup On Load */
+        window.onload = () => {
+            selectDinoSpecies('rex');
+            drawCrystal();
+        };
+    </script>
+</body>
+</html>
