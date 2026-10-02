@@ -3,79 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLOOMIE // AMISSA — Ghost Girl Arcana</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        void: '#05040a',
-                        'void-card': '#0e0818',
-                        'hot-pink': '#ff1493',
-                        'bubblegum': '#ff66b2',
-                        'neon-pink': '#f72585',
-                        'pastel-pink': '#ffb7dd',
-                        'goth-purple': '#2a0835',
-                        'goth-border': '#4a154b',
-                    },
-                    fontFamily: {
-                        pixel: ['"Press Start 2P"', 'monospace'],
-                        silk: ['"Silkscreen"', 'monospace'],
-                        vt: ['"VT323"', 'monospace'],
-                        gothic: ['"UnifrakturMaguntia"', 'serif'],
-                        creep: ['"Creepster"', 'cursive'],
-                    }
-                }
-            }
-        }
-    </script>
-
+    <title>BLOOMIE // GHOST GIRL 🖤</title>
+    <!-- Retro & Gothic Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=UnifrakturMaguntia&family=VT323&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-void: #000000;
+            --pink-neon: #ff5da2;
+            --pink-bubblegum: #ff85c0;
+            --pink-soft: #ffb3d9;
+            --pink-dark: #3a001e;
+            --grey-dark: #0f0d13;
+            --grey-card: #18141e;
+            --text-light: #ffebf5;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            image-rendering: pixelated;
+        }
+
+        /* ABSOLUTELY NO CRT OR SCANLINES HERE */
         body {
-            background-color: #05040a;
-            color: #ffb7dd;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-void);
+            color: var(--text-light);
             font-family: 'VT323', monospace;
-            background-image: 
-                radial-gradient(rgba(255, 20, 147, 0.12) 1px, transparent 0),
-                radial-gradient(rgba(247, 37, 133, 0.08) 1px, #05040a 100%);
-            background-size: 24px 24px, 100% 100%;
+            font-size: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #05040a;
-            border-left: 1px solid #4a154b;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ff1493;
-            box-shadow: 0 0 10px #ff1493;
-        }
-
-        /* CRT Scanline FX */
-        .crt::before {
-            content: " ";
-            display: block;
+        /* --- SLOW ROTATING HYPNO SWIRL BACKGROUND --- */
+        .hypno-bg-container {
             position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 999;
-            background-size: 100% 3px, 6px 100%;
+            top: 50%;
+            left: 50%;
+            width: 140vw;
+            height: 140vw;
+            transform: translate(-50%, -50%);
             pointer-events: none;
-            opacity: 0.85;
+            z-index: 0;
+            opacity: 0.12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Hypnotic Swirl Background Canvas */
-        #hypnoCanvas {
+        .hypno-spiral {
+            width: 100%;
+            height: 100%;
+            animation: slowSpin 40s linear infinite;
+        }
+
+        @keyframes slowSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Ambient Flying Bats */
+        .bat-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -83,836 +73,473 @@
             height: 100vh;
             pointer-events: none;
             z-index: 1;
-            opacity: 0.18;
-            mix-blend-mode: screen;
-            transition: opacity 0.4s ease;
+            overflow: hidden;
         }
 
-        /* Matrix Code Canvas */
-        #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
+        .floating-bat {
+            position: absolute;
+            color: var(--pink-neon);
             opacity: 0.25;
+            font-size: 24px;
+            animation: batFly 15s linear infinite;
         }
 
-        /* Retro Pixel Borders & Glows */
-        .pixel-box {
-            background: #0e0818;
-            border: 2px solid #ff1493;
-            box-shadow: 0 0 12px rgba(255, 20, 147, 0.4), inset 0 0 8px rgba(255, 20, 147, 0.2);
+        @keyframes batFly {
+            0% { transform: translate(-50px, 100vh) scale(0.8) rotate(10deg); }
+            50% { transform: translate(50vw, 50vh) scale(1.2) rotate(-10deg); }
+            100% { transform: translate(105vw, -50px) scale(0.8) rotate(10deg); }
+        }
+
+        /* Main Container */
+        .desktop {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            padding-bottom: 90px;
+        }
+
+        /* Header Bar */
+        .pixel-header {
+            position: relative;
+            z-index: 2;
+            background: var(--grey-card);
+            border: 4px solid var(--pink-neon);
+            box-shadow: 6px 6px 0px var(--pink-dark), 10px 10px 0px #000;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-title {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 42px;
+            color: var(--pink-neon);
+            text-shadow: 3px 3px 0px #000, 0 0 15px var(--pink-neon);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .header-subtitle {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: var(--pink-bubblegum);
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        /* Windows / Cards */
+        .pixel-window {
+            background: var(--grey-card);
+            border: 4px solid var(--pink-neon);
+            box-shadow: 6px 6px 0px #000;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window-header {
+            background: var(--pink-neon);
+            color: #000;
+            padding: 8px 12px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #000;
+        }
+
+        .window-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Buttons */
+        .pixel-btn {
+            background: #000;
+            color: var(--pink-neon);
+            border: 3px solid var(--pink-neon);
+            padding: 8px 14px;
+            font-family: 'Silkscreen', cursive;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+        }
+
+        .pixel-btn:hover {
+            background: var(--pink-neon);
+            color: #000;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--pink-dark);
+        }
+
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        /* Bio Vignette Header */
+        .bio-profile-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px dashed var(--pink-neon);
+            padding-bottom: 15px;
+        }
+
+        .g59-skull-icon {
+            width: 70px;
+            height: 70px;
+            background: #000;
+            border: 3px solid var(--pink-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 3px 3px 0px var(--pink-dark);
+        }
+
+        .bio-tag {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 32px;
+            color: var(--pink-bubblegum);
+            margin: 0;
+            line-height: 1;
+        }
+
+        /* Pet Cards Grid */
+        .pet-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .pet-card {
+            background: #000;
+            border: 2px solid var(--pink-bubblegum);
+            padding: 10px;
             position: relative;
         }
 
-        .pixel-box-glow:hover {
-            box-shadow: 0 0 22px rgba(255, 102, 178, 0.8), inset 0 0 12px rgba(255, 20, 147, 0.4);
-            border-color: #ff66b2;
+        .pet-card.memorial {
+            border-color: var(--pink-soft);
+            background: #0a0006;
         }
 
-        .neon-text-pink {
-            color: #ff66b2;
-            text-shadow: 0 0 8px #ff1493, 0 0 16px #f72585;
+        .pet-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: var(--pink-neon);
+            margin-bottom: 5px;
         }
 
-        .neon-text-white {
-            color: #ffffff;
-            text-shadow: 0 0 5px #ff66b2, 0 0 12px #ff1493;
+        .pet-desc {
+            font-size: 16px;
+            color: var(--text-light);
+            line-height: 1.2;
         }
 
-        .gothic-title {
-            font-family: 'UnifrakturMaguntia', serif;
-            letter-spacing: 2px;
+        /* Status & Music Badges */
+        .badge {
+            display: inline-block;
+            background: var(--pink-dark);
+            color: var(--pink-neon);
+            border: 1px solid var(--pink-neon);
+            padding: 3px 8px;
+            font-family: 'Silkscreen', cursive;
+            font-size: 11px;
+            margin-right: 5px;
+            margin-bottom: 5px;
         }
 
-        /* Bat Animation Canvas/Overlay */
-        #batOverlay {
+        /* Taskbar */
+        .taskbar {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
+            background: #000;
+            border-top: 4px solid var(--pink-neon);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
         }
 
-        /* Heart Sparkle Pop */
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-60px) scale(1.4); opacity: 0; }
+        .taskbar-clock {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--pink-neon);
         }
-        .pop-heart {
+
+        /* Interactive Floating Heart FX */
+        .floating-heart {
             position: absolute;
-            animation: floatUp 1s ease-out forwards;
+            font-size: 18px;
+            color: var(--pink-neon);
             pointer-events: none;
-            color: #ff66b2;
-            font-size: 1.5rem;
-            z-index: 50;
+            animation: rise 1s forwards ease-out;
+            z-index: 999;
         }
 
-        /* Glitch Animation */
-        @keyframes glitch {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
-        }
-        .glitch-hover:hover {
-            animation: glitch 0.2s infinite;
-        }
-
-        /* Candle flame flicker */
-        @keyframes flicker {
-            0%, 100% { opacity: 1; filter: drop-shadow(0 0 8px #ff66b2); }
-            50% { opacity: 0.6; filter: drop-shadow(0 0 3px #ff1493); }
-        }
-        .flame-active {
-            animation: flicker 0.15s infinite alternate;
+        @keyframes rise {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.5); }
         }
     </style>
 </head>
-<body class="crt min-h-screen relative selection:bg-hot-pink selection:text-black">
+<body>
 
-    <canvas id="matrixCanvas"></canvas>
-    <canvas id="hypnoCanvas"></canvas>
-    <canvas id="batOverlay"></canvas>
+    <!-- SLOW ROTATING HYPNO SWIRL BACKGROUND -->
+    <div class="hypno-bg-container">
+        <svg class="hypno-spiral" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 250, 250 m 0, 0 a 5,5 0 0,1 0,-10 a 10,10 0 0,1 10,10 a 20,20 0 0,1 -20,20 a 30,30 0 0,1 -30,-30 a 40,40 0 0,1 40,-40 a 50,50 0 0,1 50,50 a 60,60 0 0,1 -60,60 a 70,70 0 0,1 -70,-70 a 80,80 0 0,1 80,-80 a 90,90 0 0,1 90,90 a 100,100 0 0,1 -100,100 a 110,110 0 0,1 -110,-110 a 120,120 0 0,1 120,-120 a 130,130 0 0,1 130,130 a 140,140 0 0,1 -140,140 a 150,150 0 0,1 -150,-150 a 160,160 0 0,1 160,-160 a 170,170 0 0,1 170,170 a 180,180 0 0,1 -180,180 a 190,190 0 0,1 -190,-190 a 200,200 0 0,1 200,-200 a 210,210 0 0,1 210,210 a 220,220 0 0,1 -220,220 a 230,230 0 0,1 -230,-230 a 240,240 0 0,1 240,-240" 
+            fill="none" stroke="#ff5da2" stroke-width="12" stroke-linecap="round"/>
+        </svg>
+    </div>
 
-    <!-- Navigation Header -->
-    <header class="sticky top-0 z-40 bg-void/90 backdrop-blur border-b border-hot-pink/50 px-4 py-3">
-        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-skull text-hot-pink text-xl animate-pulse"></i>
-                <span class="font-pixel text-xs sm:text-sm text-bubblegum tracking-widest neon-text-pink">GHOST GIRL // G59</span>
+    <!-- Floating Bat Overlay -->
+    <div class="bat-overlay">
+        <div class="floating-bat" style="top:10%; animation-delay: 0s;">🦇</div>
+        <div class="floating-bat" style="top:40%; animation-delay: 5s;">🦇</div>
+        <div class="floating-bat" style="top:70%; animation-delay: 10s;">🦇</div>
+    </div>
+
+    <!-- Header -->
+    <div class="pixel-header">
+        <div>
+            <h1 class="header-title">ghost girl // bloomie</h1>
+            <div class="header-subtitle">AMISSA • THE PINK THORN TRADING CO.</div>
+        </div>
+        <div>
+            <button class="pixel-btn" onclick="playAudioBeep(660, 0.1)">SFX 🔊</button>
+        </div>
+    </div>
+
+    <!-- Main Grid Desktop -->
+    <div class="desktop">
+
+        <!-- MODULE 1: About Me & Vibe -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>PROFILE.SYS</span>
+                <span>[X]</span>
             </div>
+            <div class="window-body">
+                <div class="bio-profile-box">
+                    <div class="g59-skull-icon">💀</div>
+                    <div>
+                        <h2 class="bio-tag">Bloomie / Amissa</h2>
+                        <div style="font-size: 16px; color: var(--pink-bubblegum);">
+                            Goth-Kawaii • Digital Artist • ARK Breeder
+                        </div>
+                    </div>
+                </div>
 
-            <!-- FX Toggles & Sound Engine Bar -->
-            <div class="flex items-center gap-2 sm:gap-4 flex-wrap text-xs font-silk">
-                <button id="btnSoundToggle" onclick="toggleSound()" class="px-2 py-1 pixel-box hover:bg-hot-pink/20 text-bubblegum transition flex items-center gap-1">
-                    <i class="fa-solid fa-volume-high" id="soundIcon"></i> SFX: <span id="soundStatus" class="text-green-400">ON</span>
-                </button>
-                <button id="btnHypnoToggle" onclick="toggleHypno()" class="px-2 py-1 pixel-box hover:bg-hot-pink/20 text-bubblegum transition flex items-center gap-1">
-                    <i class="fa-solid fa-compact-disc"></i> HYPNO: <span id="hypnoStatus" class="text-green-400">ON</span>
-                </button>
-                <button id="btnBatToggle" onclick="triggerBatSwarm()" class="px-2 py-1 pixel-box hover:bg-hot-pink/20 text-bubblegum transition flex items-center gap-1">
-                    <i class="fa-solid fa-bat"></i> RELEASE BATS
-                </button>
+                <div style="line-height: 1.4;">
+                    Welcome to my little corner of the void 🖤 I run <b>The Pink Thorn Trading Co.</b> over in <i>ARK: Survival Ascended</i>, specializing in custom mutated colorways & stat lines. When I'm not breeding dinos, I'm usually making vector stickers, writing CSS snippets, or sipping iced caramel Frappuccinos.
+                </div>
+
+                <div>
+                    <div class="badge">🕸️ WHIMSIGOTH</div>
+                    <div class="badge">🦇 G59 VIBES</div>
+                    <div class="badge">☕ CARAMEL FRAPPUCCINOS</div>
+                    <div class="badge">🎨 AFFINITY DESIGNER</div>
+                    <div class="badge">💻 OBSIDIAN CSS</div>
+                </div>
             </div>
         </div>
-    </header>
 
-    <!-- Main Container -->
-    <main class="relative z-10 max-w-6xl mx-auto px-4 py-8 space-y-12">
+        <!-- MODULE 2: The Fur Babies -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>FUR_BABIES.LOG</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div style="font-family:'Press Start 2P'; font-size:11px; color:var(--pink-neon);">
+                    MY FAMILIARS 🐾
+                </div>
 
-        <section class="pixel-box p-6 sm:p-8 rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="pet-grid">
+                    <!-- Bilbo -->
+                    <div class="pet-card">
+                        <div class="pet-name">🐶 BILBO</div>
+                        <div class="pet-desc">My goofy senior pup! Half-blind, deaf, and 100% good boy.</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Bilbo', 'BARK! 🐾', 200, event)">PAT BILBO</button>
+                    </div>
+
+                    <!-- Lucifer -->
+                    <div class="pet-card">
+                        <div class="pet-name">🐱‍⬛ LUCIFER</div>
+                        <div class="pet-desc">Handsome tuxedo cat & main desktop companion.</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Lucifer', 'Purrr~ 🐈‍⬛', 520, event)">PAT LUCIFER</button>
+                    </div>
+
+                    <!-- Ozzie -->
+                    <div class="pet-card">
+                        <div class="pet-name">🐈‍‍⬛ OZZIE</div>
+                        <div class="pet-desc">All-black stealth void cat with glowing eyes.</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Ozzie', 'Meow! 🖤', 600, event)">PAT OZZIE</button>
+                    </div>
+
+                    <!-- Circa -->
+                    <div class="pet-card memorial">
+                        <div class="pet-name" style="color:var(--pink-soft);">🌈 CIRCA</div>
+                        <div class="pet-desc">In loving memory. Always loafing in my heart. 🕯️</div>
+                        <button class="pixel-btn" style="margin-top:8px; font-size:10px; padding:4px 8px;" onclick="patPet('Circa', '✨ Angel Cat ✨', 880, event)">LIGHT CANDLE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 3: Gaming & Music Rotation -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>ROTATION.EXE</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div style="font-family:'Press Start 2P'; font-size:11px; color:var(--pink-neon);">
+                    🎮 CURRENT GAMES
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    <div class="badge">ARK: Survival Ascended</div>
+                    <div class="badge">World of Warcraft</div>
+                    <div class="badge">League of Legends</div>
+                    <div class="badge">FragPunk</div>
+                    <div class="badge">Risk of Rain 2</div>
+                    <div class="badge">Funguys Swarm</div>
+                </div>
+
+                <div style="font-family:'Press Start 2P'; font-size:11px; color:var(--pink-neon); margin-top:10px;">
+                    🎧 MUSIC ON REPEAT
+                </div>
+                <div style="line-height:1.3; background:#000; padding:10px; border:2px solid var(--pink-dark);">
+                    • <b>$uicideboy$</b> ($crim & Ruby) <br>
+                    • Moldkilla & Humbe <br>
+                    • Dark Trap / Shadow Rap / Lofi Horror Beats
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4: 8-Bit Synth Audio Box -->
+        <div class="pixel-window">
+            <div class="window-header">
+                <span>CHIPTUNE_PLAYER.WAV</span>
+                <span>[X]</span>
+            </div>
+            <div class="window-body">
+                <div style="font-family:'Silkscreen'; font-size:12px; color:var(--pink-neon);">
+                    TRACK: "VOID_PINK_LOFI_LOOP"
+                </div>
                 
-                <!-- Avatar with Hypno Spiral Border Frame & Fangs Accent -->
-                <div class="md:col-span-4 flex flex-col items-center text-center">
-                    <div class="relative w-48 h-48 sm:w-56 sm:h-56 p-2 rounded-full border-4 border-hot-pink shadow-[0_0_25px_#ff1493] bg-black group">
-                        <!-- Custom Hypno Spiral SVG Overlay behind avatar -->
-                        <svg class="absolute inset-0 w-full h-full animate-[spin_10s_linear_infinite] opacity-40 pointer-events-none" viewBox="0 0 100 100">
-                            <path d="M50,50 m-45,0 a45,45 0 1,0 90,0 a45,45 0 1,0 -90,0" fill="none" stroke="#ff1493" stroke-width="4" stroke-dasharray="6,6"/>
-                            <path d="M50,50 m-35,0 a35,35 0 1,0 70,0 a35,35 0 1,0 -70,0" fill="none" stroke="#ff66b2" stroke-width="3" stroke-dasharray="5,5"/>
-                            <path d="M50,50 m-25,0 a25,25 0 1,0 50,0 a25,25 0 1,0 -50,0" fill="none" stroke="#f72585" stroke-width="3"/>
-                        </svg>
-
-                        <!-- Profile Avatar Image / Graphic -->
-                        <div class="w-full h-full rounded-full overflow-hidden border-2 border-bubblegum bg-void flex items-center justify-center relative">
-                            <!-- Vampire Fangs & Skull Stylized SVG Art -->
-                            <svg viewBox="0 0 200 200" class="w-full h-full object-cover">
-                                <rect width="200" height="200" fill="#08060c"/>
-                                <!-- Dark Silhouette Background -->
-                                <circle cx="100" cy="100" r="90" fill="#150a21"/>
-                                <!-- Bat Flying Silhouettes inside frame -->
-                                <path d="M 30,50 Q 40,40 50,50 Q 60,40 70,50 Q 50,60 30,50 Z" fill="#ff1493" opacity="0.6"/>
-                                <path d="M 130,40 Q 140,30 150,40 Q 160,30 170,40 Q 150,50 130,40 Z" fill="#ff66b2" opacity="0.5"/>
-                                <!-- Vamp Lips & Fangs Motif -->
-                                <g transform="translate(20, 20)">
-                                    <path d="M 30,110 Q 80,70 130,110 Q 80,150 30,110 Z" fill="#000" stroke="#ff1493" stroke-width="4"/>
-                                    <!-- Lips -->
-                                    <path d="M 32,108 Q 80,75 128,108 Q 80,120 32,108 Z" fill="#ff1493"/>
-                                    <!-- Fangs -->
-                                    <polygon points="55,100 62,122 68,100" fill="#ffffff"/>
-                                    <polygon points="92,100 98,122 105,100" fill="#ffffff"/>
-                                </g>
-                                <!-- Skull Eyes Shadow -->
-                                <circle cx="70" cy="75" r="14" fill="#ff66b2" opacity="0.8"/>
-                                <circle cx="130" cy="75" r="14" fill="#ff66b2" opacity="0.8"/>
-                                <circle cx="70" cy="75" r="5" fill="#000"/>
-                                <circle cx="130" cy="75" r="5" fill="#000"/>
-                            </svg>
-                        </div>
-
-                        <!-- Badge Icon -->
-                        <div class="absolute -bottom-2 -right-2 bg-hot-pink text-black p-2 rounded-full border-2 border-white font-pixel text-xs animate-bounce" title="Online & Spellcasting">
-                            <i class="fa-solid fa-spaghetti-monster-flying"></i>
-                        </div>
-                    </div>
-
-                    <h2 class="mt-4 font-gothic text-3xl sm:text-4xl text-bubblegum neon-text-pink">ghost girl</h2>
-                    <p class="font-pixel text-xs text-hot-pink mt-1 tracking-widest">[ G59 // GUROKAWAII ]</p>
-                </div>
-
-                <!-- Bio Header Info -->
-                <div class="md:col-span-8 space-y-4">
-                    <div class="border-b border-hot-pink/40 pb-3">
-                        <h1 class="font-pixel text-2xl sm:text-4xl font-bold text-white tracking-wider">
-                            BLOOMIE <span class="text-hot-pink">//</span> AMISSA
-                        </h1>
-                        <p class="font-vt text-2xl text-bubblegum mt-1">
-                            <i class="fa-solid fa-moon text-hot-pink mr-2"></i>Dark Aesthetic Tinkerer, Vector Artist & Ark Dino Breeder
-                        </p>
-                    </div>
-
-                    <p class="font-vt text-xl leading-relaxed text-pink-100/90 bg-void/60 p-4 border-l-4 border-hot-pink rounded">
-                        Welcome to my cursed playground. Drenched in high-contrast bubblegum neon, hypno swirls, 16-bit soundscapes, and pitch-black void vibes. I craft obsidian plugins, breed mutant pink dinosaurs, vibe to underground shadow rap, and hoard cozy pet familiars.
-                    </p>
-
-                    <!-- Quote Banner -->
-                    <div class="flex items-center justify-between bg-goth-purple/50 p-3 border border-goth-border rounded text-xs sm:text-sm font-pixel text-bubblegum">
-                        <span><i class="fa-solid fa-quote-left text-hot-pink mr-2"></i>"LIFE IS BEAUTIFUL"</span>
-                        <span class="text-hot-pink hidden sm:inline">🕸️ 🦇 🖤 🕸️</span>
-                    </div>
-
-                    <!-- Quick Vibe Tags -->
-                    <div class="flex flex-wrap gap-2 pt-2">
-                        <span class="px-3 py-1 bg-hot-pink/20 border border-hot-pink rounded-full font-silk text-xs text-bubblegum">
-                            <i class="fa-solid fa-wand-magic-sparkles text-hot-pink mr-1"></i> Gurokawaii Y2K
-                        </span>
-                        <span class="px-3 py-1 bg-hot-pink/20 border border-hot-pink rounded-full font-silk text-xs text-bubblegum">
-                            <i class="fa-solid fa-laptop-code text-hot-pink mr-1"></i> Obsidian CSS Wizard
-                        </span>
-                        <span class="px-3 py-1 bg-hot-pink/20 border border-hot-pink rounded-full font-silk text-xs text-bubblegum">
-                            <i class="fa-solid fa-dragon text-hot-pink mr-1"></i> The Pink Thorn Co.
-                        </span>
-                        <span class="px-3 py-1 bg-hot-pink/20 border border-hot-pink rounded-full font-silk text-xs text-bubblegum">
-                            <i class="fa-solid fa-mug-hot text-hot-pink mr-1"></i> Frappuccino Fiend
-                        </span>
-                    </div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="pixel-btn" style="flex:1" id="musicBtn" onclick="toggleLoop()">▶ PLAY 8-BIT LOOP</button>
+                    <button class="pixel-btn" onclick="playArp()">🎶 SOLI</button>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            <div class="pixel-box p-4 rounded text-center pixel-box-glow transition cursor-pointer" onclick="playBeep(600, 'square', 0.1)">
-                <i class="fa-solid fa-gamepad text-3xl text-hot-pink mb-2"></i>
-                <h3 class="font-pixel text-xs text-white uppercase">Class</h3>
-                <p class="font-vt text-lg text-bubblegum mt-1">Gamer / Breeder</p>
-            </div>
-            <div class="pixel-box p-4 rounded text-center pixel-box-glow transition cursor-pointer" onclick="playBeep(700, 'square', 0.1)">
-                <i class="fa-solid fa-pen-nib text-3xl text-hot-pink mb-2"></i>
-                <h3 class="font-pixel text-xs text-white uppercase">Art Style</h3>
-                <p class="font-vt text-lg text-bubblegum mt-1">Vector / Affinity</p>
-            </div>
-            <div class="pixel-box p-4 rounded text-center pixel-box-glow transition cursor-pointer" onclick="playBeep(800, 'square', 0.1)">
-                <i class="fa-solid fa-code text-3xl text-hot-pink mb-2"></i>
-                <h3 class="font-pixel text-xs text-white uppercase">Specialty</h3>
-                <p class="font-vt text-lg text-bubblegum mt-1">Obsidian & Plugins</p>
-            </div>
-            <div class="pixel-box p-4 rounded text-center pixel-box-glow transition cursor-pointer" onclick="playBeep(900, 'square', 0.1)">
-                <i class="fa-solid fa-coffee text-3xl text-hot-pink mb-2"></i>
-                <h3 class="font-pixel text-xs text-white uppercase">Fuel</h3>
-                <p class="font-vt text-lg text-bubblegum mt-1">Iced Coffee & Frapps</p>
-            </div>
-            <div class="pixel-box p-4 rounded text-center col-span-2 sm:col-span-1 pixel-box-glow transition cursor-pointer" onclick="playBeep(1000, 'square', 0.1)">
-                <i class="fa-solid fa-skull-crossbones text-3xl text-hot-pink mb-2"></i>
-                <h3 class="font-pixel text-xs text-white uppercase">Music Vibe</h3>
-                <p class="font-vt text-lg text-bubblegum mt-1">$uicideboy$ / G59</p>
-            </div>
-        </section>
+    </div>
 
-        <section class="space-y-6">
-            <div class="flex items-center justify-between border-b-2 border-hot-pink pb-2">
-                <h2 class="font-pixel text-xl sm:text-2xl text-white flex items-center gap-3">
-                    <i class="fa-solid fa-paw text-hot-pink"></i> THE FUR BABIES
-                </h2>
-                <span class="font-vt text-xl text-bubblegum">Interactive Companions</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <!-- 1. BILBO -->
-                <div class="pixel-box p-6 rounded-lg pixel-box-glow flex flex-col justify-between relative overflow-hidden" id="pet-bilbo">
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-pixel text-lg text-white flex items-center gap-2">
-                                    BILBO <span class="text-xs text-hot-pink font-vt">(Senior Doggo)</span>
-                                </h3>
-                                <p class="font-vt text-lg text-bubblegum">The Legendary Heart of the House 🐶</p>
-                            </div>
-                            <span class="px-2 py-1 bg-hot-pink/30 border border-hot-pink rounded text-xs font-pixel text-pink-200">
-                                Half-Blind & Deaf
-                            </span>
-                        </div>
-                        <p class="font-vt text-xl text-pink-100/90 leading-relaxed">
-                            Sweetest legendary boi in existence. Navigates purely by love, treats, and snuggles. Unbothered, moisturized, in his lane.
-                        </p>
-                    </div>
-
-                    <div class="mt-6 pt-4 border-t border-goth-border flex items-center justify-between">
-                        <span class="font-pixel text-xs text-hot-pink" id="bilboPatCount">Pats: 0</span>
-                        <button onclick="patBilbo(event)" class="px-4 py-2 bg-hot-pink hover:bg-neon-pink text-black font-pixel text-xs rounded transition flex items-center gap-2 shadow-[0_0_10px_#ff1493]">
-                            <i class="fa-solid fa-hand-holding-heart"></i> PAT BILBO
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 2. LUCIFER -->
-                <div class="pixel-box p-6 rounded-lg pixel-box-glow flex flex-col justify-between relative overflow-hidden" id="pet-lucifer">
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-pixel text-lg text-white flex items-center gap-2">
-                                    LUCIFER <span class="text-xs text-hot-pink font-vt">(Tuxedo Cat)</span>
-                                </h3>
-                                <p class="font-vt text-lg text-bubblegum">Mischievous Familiar 🐱‍⬛</p>
-                            </div>
-                            <span class="px-2 py-1 bg-hot-pink/30 border border-hot-pink rounded text-xs font-pixel text-pink-200">
-                                Chaos Demon
-                            </span>
-                        </div>
-                        <p class="font-vt text-xl text-pink-100/90 leading-relaxed">
-                            Dressed in a permanent tiny tuxedo. Plots world domination by knocking mugs off desks and chasing phantom red dots.
-                        </p>
-                    </div>
-
-                    <div class="mt-6 pt-4 border-t border-goth-border flex items-center justify-between">
-                        <span class="font-pixel text-xs text-hot-pink" id="luciferAction">Status: Purring</span>
-                        <button onclick="playLaserPointer(event)" class="px-4 py-2 bg-hot-pink hover:bg-neon-pink text-black font-pixel text-xs rounded transition flex items-center gap-2 shadow-[0_0_10px_#ff1493]">
-                            <i class="fa-solid fa-circle-dot"></i> LASER POINTER
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 3. OZZIE -->
-                <div class="pixel-box p-6 rounded-lg pixel-box-glow flex flex-col justify-between relative overflow-hidden" id="pet-ozzie">
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-pixel text-lg text-white flex items-center gap-2">
-                                    OZZIE <span class="text-xs text-hot-pink font-vt">(Void Cat)</span>
-                                </h3>
-                                <p class="font-vt text-lg text-bubblegum">Pure Shadow Void 🐈‍⬛</p>
-                            </div>
-                            <span class="px-2 py-1 bg-hot-pink/30 border border-hot-pink rounded text-xs font-pixel text-pink-200">
-                                Stealth Master
-                            </span>
-                        </div>
-                        <p class="font-vt text-xl text-pink-100/90 leading-relaxed">
-                            A pitch-black shadow with big glowing eyes. Master of blending into dark furniture and appearing out of nowhere for snacks.
-                        </p>
-                    </div>
-
-                    <div class="mt-6 pt-4 border-t border-goth-border flex items-center justify-between">
-                        <span class="font-pixel text-xs text-hot-pink" id="ozzieTunaCount">Tuna Given: 0</span>
-                        <button onclick="giveTuna(event)" class="px-4 py-2 bg-hot-pink hover:bg-neon-pink text-black font-pixel text-xs rounded transition flex items-center gap-2 shadow-[0_0_10px_#ff1493]">
-                            <i class="fa-solid fa-fish"></i> GIVE TUNA
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 4. CIRCA (MEMORIAL) -->
-                <div class="pixel-box p-6 rounded-lg border-bubblegum/60 flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-void-card to-goth-purple/40" id="pet-circa">
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-pixel text-lg text-bubblegum flex items-center gap-2">
-                                    CIRCA <span class="text-xs text-pink-300 font-vt">(In Loving Memory) 🌈</span>
-                                </h3>
-                                <p class="font-vt text-lg text-pink-300">Forever Angel Companion</p>
-                            </div>
-                            <span class="px-2 py-1 bg-pink-900/40 border border-pink-400/50 rounded text-xs font-pixel text-pink-300">
-                                Rainbow Bridge
-                            </span>
-                        </div>
-                        <p class="font-vt text-xl text-pink-100/90 leading-relaxed">
-                            Forever resting in the warm stars. Never forgotten, deeply loved, and running free across the cosmos.
-                        </p>
-                    </div>
-
-                    <div class="mt-6 pt-4 border-t border-goth-border flex items-center justify-between">
-                        <span class="font-pixel text-xs text-bubblegum flex items-center gap-2">
-                            Candle Status: <i class="fa-solid fa-fire text-amber-400" id="candleFlameIcon"></i>
-                        </span>
-                        <button onclick="lightCandle(event)" class="px-4 py-2 bg-purple-900/80 hover:bg-hot-pink text-bubblegum hover:text-black border border-hot-pink font-pixel text-xs rounded transition flex items-center gap-2">
-                            <i class="fa-solid fa-fire-flame-curved text-amber-300"></i> LIGHT A CANDLE
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            <!-- Gaming Bench -->
-            <div class="pixel-box p-6 rounded-lg space-y-4">
-                <h3 class="font-pixel text-base text-white border-b border-hot-pink pb-2 flex items-center justify-between">
-                    <span><i class="fa-solid fa-gamepad text-hot-pink mr-2"></i> GAMING BENCH</span>
-                    <i class="fa-solid fa-ghost text-hot-pink text-xs"></i>
-                </h3>
-                <ul class="space-y-3 font-vt text-xl">
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">ARK: SURVIVAL ASCENDED</strong>
-                        <span>Owner of <span class="text-hot-pink font-bold">The Pink Thorn Trading Co.</span> Dino Breeder extraodinaire!</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">WORLD OF WARCRAFT</strong>
-                        <span>Raids, transmog hunting, and spooky mounts.</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">LEAGUE OF LEGENDS</strong>
-                        <span>ARAM enthusiast & bot lane antics.</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">FRAGPUNK & FUNGUYS SWARM</strong>
-                        <span>Fast-paced arena chaos & cozy indie games.</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">RISK OF RAIN 2</strong>
-                        <span>Stacking items until the framerate dies.</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Creative & Dev Lab -->
-            <div class="pixel-box p-6 rounded-lg space-y-4">
-                <h3 class="font-pixel text-base text-white border-b border-hot-pink pb-2 flex items-center justify-between">
-                    <span><i class="fa-solid fa-wand-magic-sparkles text-hot-pink mr-2"></i> CREATIVE LAB</span>
-                    <i class="fa-solid fa-bug text-hot-pink text-xs"></i>
-                </h3>
-                <ul class="space-y-3 font-vt text-xl">
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">VECTOR GRAPHIC ARTIST</strong>
-                        <span>Crafting stickers, gothic graphics, and custom digital icons using Affinity Designer.</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">OBSIDIAN CSS & PLUGINS</strong>
-                        <span>Obsessive vault customization, theme tweaking, JavaScript plugin modding, & snippet wizardry.</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">BULMA & TAILWIND DESIGN</strong>
-                        <span>Building cyber-goth web layouts, responsive retro UI components, and aesthetic templates.</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Sound & Vibe Rotation -->
-            <div class="pixel-box p-6 rounded-lg space-y-4">
-                <h3 class="font-pixel text-base text-white border-b border-hot-pink pb-2 flex items-center justify-between">
-                    <span><i class="fa-solid fa-compact-disc text-hot-pink mr-2"></i> SOUND ROTATION</span>
-                    <i class="fa-solid fa-skull text-hot-pink text-xs"></i>
-                </h3>
-                <ul class="space-y-3 font-vt text-xl">
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">$UICIDEBOY$ ($CRIM & RUBY)</strong>
-                        <span>G59 till the grave. Underground heavy shadow rap & dark trap beats.</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">TRUE CRIME & HORROR MOVIES</strong>
-                        <span>Background noise while designing: spooky horror-comedies, unsolved mysteries, and dark documentaries.</span>
-                    </li>
-                    <li class="bg-void/80 p-2 border-l-2 border-hot-pink rounded">
-                        <strong class="text-bubblegum font-pixel text-xs block">LOFI & WITCH HOUSE</strong>
-                        <span>Late night coding sessions bathed in dark synth ambience and vinyl crackle.</span>
-                    </li>
-                </ul>
-            </div>
-
-        </section>
-
-        <section class="pixel-box p-6 sm:p-8 rounded-lg space-y-6">
-            <div class="flex items-center justify-between border-b border-hot-pink pb-3">
-                <h2 class="font-pixel text-lg sm:text-xl text-white flex items-center gap-2">
-                    <i class="fa-solid fa-comment-dots text-hot-pink"></i> GUESTBOOK / VISITOR LOG
-                </h2>
-                <span class="font-pixel text-xs text-hot-pink">[ LOCALSTORAGE ENABLED ]</span>
-            </div>
-
-            <form id="guestbookForm" onsubmit="addGuestbookEntry(event)" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-pixel text-xs text-bubblegum mb-1">YOUR HANDLE / ALIAS:</label>
-                        <input type="text" id="gbName" required placeholder="e.g. GhostVisitor" class="w-full bg-void border border-hot-pink p-2 text-pink-100 font-vt text-xl rounded focus:outline-none focus:ring-2 focus:ring-bubblegum">
-                    </div>
-                    <div>
-                        <label class="block font-pixel text-xs text-bubblegum mb-1">YOUR VIBE / TAG:</label>
-                        <input type="text" id="gbTag" placeholder="e.g. 🦇 Spooky Friend" class="w-full bg-void border border-hot-pink p-2 text-pink-100 font-vt text-xl rounded focus:outline-none focus:ring-2 focus:ring-bubblegum">
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-pixel text-xs text-bubblegum mb-1">MESSAGE:</label>
-                    <textarea id="gbMessage" required rows="3" placeholder="Leave a spooky message or a note for Bloomie..." class="w-full bg-void border border-hot-pink p-2 text-pink-100 font-vt text-xl rounded focus:outline-none focus:ring-2 focus:ring-bubblegum"></textarea>
-                </div>
-                <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-hot-pink hover:bg-neon-pink text-black font-pixel text-xs rounded transition flex items-center justify-center gap-2 shadow-[0_0_15px_#ff1493]">
-                    <i class="fa-solid fa-paper-plane"></i> TRANSMIT MESSAGE
-                </button>
-            </form>
-
-            <div class="mt-6 pt-4 border-t border-goth-border space-y-4" id="guestbookEntries">
-                <!-- Guestbook Entries rendered via JS -->
-            </div>
-        </section>
-
-        <footer class="text-center font-pixel text-xs text-hot-pink/80 py-8 border-t border-hot-pink/30 space-y-2">
-            <p>BLOOMIE // AMISSA &bull; GHOST GIRL ARCANA &bull; 2026</p>
-            <p class="font-vt text-lg text-bubblegum">Crafted with high-contrast bubblegum pink magic, 16-bit noise, and bats 🦇</p>
-        </footer>
-
-    </main>
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="pixel-btn" onclick="playAudioBeep(440, 0.08)">🩸 GHOST_GIRL_OS</button>
+        <div class="taskbar-clock" id="pixelClock">12:00 AM</div>
+    </div>
 
     <script>
-        /* ----------------------------------------------------
-           1. Web Audio API Engine for 8-Bit Retro Sound Effects
-           ---------------------------------------------------- */
-        let audioCtx = null;
-        let soundEnabled = true;
+        // --- Web Audio API Synth Engine ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playAudioBeep(freq, duration) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
         }
 
-        function playBeep(freq = 440, type = 'square', duration = 0.1) {
-            if (!soundEnabled) return;
-            initAudio();
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch (e) {
-                console.log(e);
-            }
-        }
-
-        function playArpeggio() {
-            if (!soundEnabled) return;
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-            notes.forEach((freq, idx) => {
-                setTimeout(() => playBeep(freq, 'triangle', 0.12), idx * 60);
-            });
-        }
-
-        function playBark() {
-            if (!soundEnabled) return;
-            initAudio();
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.15);
-            } catch (e) {}
-        }
-
-        function playMeow() {
-            if (!soundEnabled) return;
-            initAudio();
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(750, audioCtx.currentTime + 0.15);
-                osc.frequency.linearRampToValueAtTime(500, audioCtx.currentTime + 0.3);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
-            } catch (e) {}
-        }
-
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundStatus').innerText = soundEnabled ? 'ON' : 'OFF';
-            document.getElementById('soundStatus').className = soundEnabled ? 'text-green-400' : 'text-red-400';
-            if (soundEnabled) playBeep(880, 'square', 0.1);
-        }
-
-        /* ----------------------------------------------------
-           2. Hypnotic Spiral Canvas Background
-           ---------------------------------------------------- */
-        const hypnoCanvas = document.getElementById('hypnoCanvas');
-        const hypnoCtx = hypnoCanvas.getContext('2d');
-        let hypnoActive = true;
-        let hypnoAngle = 0;
-
-        function resizeHypno() {
-            hypnoCanvas.width = window.innerWidth;
-            hypnoCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeHypno);
-        resizeHypno();
-
-        function drawHypno() {
-            if (!hypnoActive) {
-                hypnoCtx.clearRect(0, 0, hypnoCanvas.width, hypnoCanvas.height);
-                requestAnimationFrame(drawHypno);
-                return;
-            }
-
-            hypnoCtx.fillStyle = 'rgba(5, 4, 10, 0.2)';
-            hypnoCtx.fillRect(0, 0, hypnoCanvas.width, hypnoCanvas.height);
-
-            const cx = hypnoCanvas.width / 2;
-            const cy = hypnoCanvas.height / 2;
-            const maxRadius = Math.max(hypnoCanvas.width, hypnoCanvas.height) * 0.8;
-
-            hypnoCtx.save();
-            hypnoCtx.translate(cx, cy);
-            hypnoCtx.rotate(hypnoAngle);
-
-            hypnoCtx.beginPath();
-            hypnoCtx.strokeStyle = '#ff1493';
-            hypnoCtx.lineWidth = 14;
-
-            for (let a = 0; a < Math.PI * 16; a += 0.1) {
-                const r = a * 18;
-                const x = r * Math.cos(a);
-                const y = r * Math.sin(a);
-                if (a === 0) hypnoCtx.moveTo(x, y);
-                else hypnoCtx.lineTo(x, y);
-            }
-            hypnoCtx.stroke();
-            hypnoCtx.restore();
-
-            hypnoAngle += 0.015;
-            requestAnimationFrame(drawHypno);
-        }
-        drawHypno();
-
-        function toggleHypno() {
-            hypnoActive = !hypnoActive;
-            hypnoCanvas.style.opacity = hypnoActive ? '0.18' : '0';
-            document.getElementById('hypnoStatus').innerText = hypnoActive ? 'ON' : 'OFF';
-            document.getElementById('hypnoStatus').className = hypnoActive ? 'text-green-400' : 'text-red-400';
-            playBeep(400, 'triangle', 0.1);
-        }
-
-        /* ----------------------------------------------------
-           3. Matrix Code Rain Canvas Effect
-           ---------------------------------------------------- */
-        const matrixCanvas = document.getElementById('matrixCanvas');
-        const matrixCtx = matrixCanvas.getContext('2d');
-
-        function resizeMatrix() {
-            matrixCanvas.width = window.innerWidth;
-            matrixCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeMatrix);
-        resizeMatrix();
-
-        const chars = '0123456789ABCDEFAMISSABLOOMIEG59🦇🕸️💖';
-        const fontSize = 16;
-        const columns = Math.floor(matrixCanvas.width / fontSize) + 1;
-        const drops = Array(columns).fill(1);
-
-        function drawMatrix() {
-            matrixCtx.fillStyle = 'rgba(5, 4, 10, 0.08)';
-            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-
-            matrixCtx.fillStyle = '#ff66b2';
-            matrixCtx.font = fontSize + 'px VT323';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-        setInterval(drawMatrix, 40);
-
-        /* ----------------------------------------------------
-           4. Bat Swarm Canvas Overlay
-           ---------------------------------------------------- */
-        const batCanvas = document.getElementById('batOverlay');
-        const batCtx = batCanvas.getContext('2d');
-
-        function resizeBat() {
-            batCanvas.width = window.innerWidth;
-            batCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeBat);
-        resizeBat();
-
-        let bats = [];
-
-        class Bat {
-            constructor() {
-                this.x = Math.random() * batCanvas.width;
-                this.y = batCanvas.height + 20;
-                this.speedX = (Math.random() - 0.5) * 4;
-                this.speedY = - (Math.random() * 3 + 2);
-                this.size = Math.random() * 12 + 10;
-                this.wingAngle = 0;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.wingAngle += 0.2;
-            }
-            draw() {
-                batCtx.save();
-                batCtx.translate(this.x, this.y);
-                batCtx.fillStyle = '#ff1493';
-                batCtx.beginPath();
-                // Simple bat silhouette
-                const w = this.size;
-                const flap = Math.sin(this.wingAngle) * (w / 2);
-                batCtx.moveTo(0, 0);
-                batCtx.quadraticCurveTo(-w / 2, -w / 2 + flap, -w, flap);
-                batCtx.quadraticCurveTo(-w / 2, w / 4, 0, w / 3);
-                batCtx.quadraticCurveTo(w / 2, w / 4, w, flap);
-                batCtx.quadraticCurveTo(w / 2, -w / 2 + flap, 0, 0);
-                batCtx.fill();
-                batCtx.restore();
-            }
-        }
-
-        function triggerBatSwarm() {
-            playArpeggio();
-            for (let i = 0; i < 25; i++) {
-                bats.push(new Bat());
-            }
-        }
-
-        function animateBats() {
-            batCtx.clearRect(0, 0, batCanvas.width, batCanvas.height);
-            for (let i = bats.length - 1; i >= 0; i--) {
-                bats[i].update();
-                bats[i].draw();
-                if (bats[i].y < -50 || bats[i].x < -50 || bats[i].x > batCanvas.width + 50) {
-                    bats.splice(i, 1);
-                }
-            }
-            requestAnimationFrame(animateBats);
-        }
-        animateBats();
-
-        /* ----------------------------------------------------
-           5. Interactive Pet Button Handlers & Heart Pops
-           ---------------------------------------------------- */
-        let bilboPats = 0;
-        let ozzieTuna = 0;
-
-        function spawnHeart(e, text = '💖') {
+        // Floating Hearts / FX on click
+        function spawnFloatingHeart(e) {
             const heart = document.createElement('div');
-            heart.className = 'pop-heart font-pixel';
-            heart.innerText = text;
-            heart.style.left = (e.clientX - 10) + 'px';
-            heart.style.top = (e.clientY - 20) + 'px';
+            heart.className = 'floating-heart';
+            heart.innerText = '💖';
+            heart.style.left = (e.clientX || 100) + 'px';
+            heart.style.top = (e.clientY || 100) + 'px';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 1000);
         }
 
-        function patBilbo(e) {
-            bilboPats++;
-            document.getElementById('bilboPatCount').innerText = `Pats: ${bilboPats}`;
-            playBark();
-            spawnHeart(e, '🐶💖');
+        function patPet(name, responseText, soundFreq, e) {
+            playAudioBeep(soundFreq, 0.15);
+            spawnFloatingHeart(e);
+            alert(`${name}: "${responseText}"`);
         }
 
-        function playLaserPointer(e) {
-            playMeow();
-            spawnHeart(e, '🔴✨');
-            const status = document.getElementById('luciferAction');
-            status.innerText = 'Status: Pouncing!';
-            setTimeout(() => { status.innerText = 'Status: Purring'; }, 1500);
+        // --- Chiptune Loop Engine ---
+        let isPlaying = false;
+        let loopInterval;
+
+        function toggleLoop() {
+            const btn = document.getElementById('musicBtn');
+            if (isPlaying) {
+                clearInterval(loopInterval);
+                isPlaying = false;
+                btn.innerText = '▶ PLAY 8-BIT LOOP';
+            } else {
+                isPlaying = true;
+                btn.innerText = '⏸ PAUSE';
+                const scale = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00];
+                let idx = 0;
+                loopInterval = setInterval(() => {
+                    playAudioBeep(scale[idx], 0.12);
+                    idx = (idx + 1) % scale.length;
+                }, 220);
+            }
         }
 
-        function giveTuna(e) {
-            ozzieTuna++;
-            document.getElementById('ozzieTunaCount').innerText = `Tuna Given: ${ozzieTuna}`;
-            playMeow();
-            spawnHeart(e, '🐟🖤');
-        }
-
-        function lightCandle(e) {
-            playBeep(880, 'sine', 0.3);
-            spawnHeart(e, '🕯️✨');
-            const flame = document.getElementById('candleFlameIcon');
-            flame.classList.toggle('flame-active');
-        }
-
-        /* ----------------------------------------------------
-           6. Guestbook LocalStorage Manager
-           ---------------------------------------------------- */
-        const defaultEntries = [
-            { name: "ScrimFan_99", tag: "🦇 G59 Supporter", msg: "Love the neon hypno aesthetic! Life is beautiful <3", date: "2026-10-01" },
-            { name: "ArkDinoBreeder", tag: "🦖 Pink Thorn Co.", msg: "Those pink mutations are legendary! Keep up the obsidian CSS magic.", date: "2026-09-28" }
-        ];
-
-        function getGuestbookEntries() {
-            const stored = localStorage.getItem('bloomie_guestbook');
-            return stored ? JSON.parse(stored) : defaultEntries;
-        }
-
-        function renderGuestbook() {
-            const container = document.getElementById('guestbookEntries');
-            const entries = getGuestbookEntries();
-            container.innerHTML = entries.map(item => `
-                <div class="bg-void/90 p-4 border border-hot-pink/40 rounded space-y-1">
-                    <div class="flex justify-between items-center text-xs font-pixel text-bubblegum">
-                        <span class="text-white">${escapeHtml(item.name)} <span class="text-hot-pink font-vt text-sm">(${escapeHtml(item.tag || 'Visitor')})</span></span>
-                        <span class="text-pink-300/60 font-vt">${item.date}</span>
-                    </div>
-                    <p class="font-vt text-xl text-pink-100">${escapeHtml(item.msg)}</p>
-                </div>
-            `).join('');
-        }
-
-        function addGuestbookEntry(e) {
-            e.preventDefault();
-            const name = document.getElementById('gbName').value;
-            const tag = document.getElementById('gbTag').value;
-            const msg = document.getElementById('gbMessage').value;
-
-            const entries = getGuestbookEntries();
-            entries.unshift({
-                name,
-                tag,
-                msg,
-                date: new Date().toISOString().split('T')[0]
+        function playArp() {
+            const notes = [440, 554.37, 659.25, 880];
+            notes.forEach((freq, index) => {
+                setTimeout(() => playAudioBeep(freq, 0.1), index * 90);
             });
-
-            localStorage.setItem('bloomie_guestbook', JSON.stringify(entries));
-            document.getElementById('guestbookForm').reset();
-            playArpeggio();
-            renderGuestbook();
         }
 
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        // Live Clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('pixelClock').innerText = now.toLocaleTimeString();
         }
-
-        // Initial Render
-        renderGuestbook();
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
