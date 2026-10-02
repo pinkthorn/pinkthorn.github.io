@@ -2,4 +2,4 @@
 my personal shpot, feel me?
 
 ## spiral visualizer w scanlines 
-https://pinkthorn.github.io/spiralvismd.html
+https://pinkthorn.github.io/spiralscanlines.html
