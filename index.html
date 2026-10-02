@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Bloomie // Spooky Cutie Sanctuary ⚡</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredoka:wght@400;600;700&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#0d0b10',
+                        voidCard: '#15121b',
+                        bubblePink: '#ff66b2',
+                        hotPink: '#ff007f',
+                        slimeGreen: '#00ff99',
+                        acidGreen: '#aaff00',
+                        gothPurple: '#2d1f3d',
+                        lavender: '#b388ff',
+                        darkBorder: '#3f2b5c'
+                    },
+                    fontFamily: {
+                        pixel: ['"Press Start 2P"', 'cursive'],
+                        retro: ['VT323', 'monospace'],
+                        cute: ['Fredoka', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                        creepy: ['Creepster', 'cursive']
+                    },
+                    boxShadow: {
+                        'pink-glow': '0 0 15px rgba(255, 102, 178, 0.4), inset 0 0 10px rgba(255, 102, 178, 0.2)',
+                        'green-glow': '0 0 15px rgba(0, 255, 153, 0.4)',
+                        'purple-glow': '0 0 20px rgba(179, 136, 255, 0.3)',
+                        'retro-pink': '4px 4px 0px #ff66b2',
+                        'retro-green': '4px 4px 0px #00ff99',
+                        'retro-dark': '5px 5px 0px #000000'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0b10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff66b2;
+            border-radius: 5px;
+            border: 2px solid #0d0b10;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff99;
+        }
+
+        /* Hypnotic Spiral Background Overlay */
+        .spiral-bg {
+            background: radial-gradient(circle, repeating-conic-gradient(#ff66b2 0 15deg, #0d0b10 15deg 30deg));
+            animation: spinSpiral 25s linear infinite;
+            opacity: 0.08;
+        }
+
+        @keyframes spinSpiral {
+            0% { transform: scale(3) rotate(0deg); }
+            100% { transform: scale(3) rotate(360deg); }
+        }
+
+        /* Floating Animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        .floating {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+
+        .floating-delayed {
+            animation: floatSlow 5s ease-in-out 1.5s infinite;
+        }
+
+        /* Pulsing Glow */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 12px rgba(255, 102, 178, 0.5); }
+            50% { box-shadow: 0 0 22px rgba(255, 102, 178, 0.9); }
+        }
+
+        .pulse-pink {
+            animation: pulseGlow 3s infinite;
+        }
+
+        /* Retro Window Header Strip */
+        .window-header {
+            background: linear-gradient(90deg, #ff66b2 0%, #2d1f3d 100%);
+        }
+
+        /* Particle Canvas Overlay */
+        #fxCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .text-stroke-black {
+            -webkit-text-stroke: 1.5px #000;
+        }
+    </style>
+</head>
+
+<body class="bg-void text-gray-200 font-cute selection:bg-bubblePink selection:text-black min-h-screen relative overflow-x-hidden">
+
+    <!-- Interactive Canvas Particle FX Layer -->
+    <canvas id="fxCanvas"></canvas>
+
+    <!-- Hypnotic Animated Spiral Background -->
+    <div id="spiralOverlay" class="fixed inset-0 spiral-bg pointer-events-none z-0 transition-opacity duration-700"></div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-8">
+
+        <header class="flex flex-wrap items-center justify-between gap-4 bg-voidCard/90 border-2 border-bubblePink/40 p-4 rounded-2xl backdrop-blur-md shadow-pink-glow">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl floating">🦇</span>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-pixel text-bubblePink tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                        BLOOMIE<span class="text-slimeGreen">.EXE</span>
+                    </h1>
+                    <p class="text-xs font-mono text-lavender/80">/// Amissa • Spooky Cutie Sanctuary</p>
+                </div>
+            </div>
+
+            <!-- Header Quick Controls -->
+            <div class="flex flex-wrap items-center gap-3 text-sm">
+                <button id="spiralToggleBtn" onclick="toggleSpiral()" class="px-3 py-1.5 bg-gothPurple/80 hover:bg-bubblePink hover:text-black border border-bubblePink/50 rounded-xl transition duration-200 font-mono text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-compact-disc text-bubblePink"></i> Spiral: <span id="spiralState">ON</span>
+                </button>
+                <button id="magicBtn" onclick="triggerMagic(event)" class="px-4 py-1.5 bg-gradient-to-r from-bubblePink to-slimeGreen text-black font-bold rounded-xl shadow-retro-dark hover:translate-x-0.5 hover:translate-y-0.5 transition duration-150 active:translate-x-1 flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Curse / Magic!
+                </button>
+            </div>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+            
+            <!-- Live Status Widget -->
+            <div class="md:col-span-8 bg-voidCard border-2 border-darkBorder rounded-2xl p-5 shadow-purple-glow relative overflow-hidden flex flex-col justify-between">
+                <div class="window-header -m-5 mb-4 p-2.5 px-4 flex justify-between items-center border-b border-bubblePink/30">
+                    <span class="font-pixel text-xs text-black font-bold tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-signal text-xs"></i> STATUS_FEED.LOG
+                    </span>
+                    <div class="flex gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-slimeGreen inline-block"></span>
+                    </div>
+                </div>
+
+                <div class="space-y-3 my-2">
+                    <div class="flex items-center gap-3">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slimeGreen opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-slimeGreen"></span>
+                        </span>
+                        <p class="font-mono text-xs text-slimeGreen uppercase tracking-widest">Current Vibe State:</p>
+                    </div>
+                    <p id="statusText" class="text-lg md:text-xl font-cute text-white font-medium pl-6 border-l-2 border-bubblePink">
+                        "Gaming in ARK redwoods 🦖 • Sipping iced coffee ☕ • Listening to $uicideboy$ 🎧"
+                    </p>
+                </div>
+
+                <!-- Interactive Badges Grid -->
+                <div class="mt-4 pt-4 border-t border-darkBorder/60 flex flex-wrap gap-2">
+                    <span class="px-2.5 py-1 bg-gothPurple text-bubblePink border border-bubblePink/30 rounded-lg text-xs font-mono floating">
+                        💀 G59 Vibe
+                    </span>
+                    <span class="px-2.5 py-1 bg-gothPurple text-slimeGreen border border-slimeGreen/30 rounded-lg text-xs font-mono floating-delayed">
+                        🦖 Pink Thorn Breeding
+                    </span>
+                    <span class="px-2.5 py-1 bg-gothPurple text-lavender border border-lavender/30 rounded-lg text-xs font-mono floating">
+                        🔮 Whimsigoth
+                    </span>
+                    <span class="px-2.5 py-1 bg-gothPurple text-pink-300 border border-pink-400/30 rounded-lg text-xs font-mono floating-delayed">
+                        🎀 Gurowkawaii
+                    </span>
+                    <span class="px-2.5 py-1 bg-gothPurple text-acidGreen border border-acidGreen/30 rounded-lg text-xs font-mono floating">
+                        🐈 Lucifer & Ozzie Mom
+                    </span>
+                </div>
+            </div>
+
+            <!-- Profile Sticker / Avatar Card -->
+            <div class="md:col-span-4 bg-voidCard border-2 border-bubblePink rounded-2xl p-5 flex flex-col items-center justify-center text-center shadow-pink-glow relative group">
+                <div class="absolute -top-3 -right-3 bg-slimeGreen text-black font-pixel text-[10px] px-2.5 py-1 rounded-full border border-black shadow-md rotate-12">
+                    CUTIE!
+                </div>
+                
+                <!-- Avatar Circle -->
+                <div class="w-32 h-32 rounded-full border-4 border-bubblePink bg-gothPurple/60 flex items-center justify-center text-6xl shadow-inner relative overflow-hidden mb-3 group-hover:scale-105 transition duration-300">
+                    <span class="select-none">🦇</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-bubblePink/20 to-transparent"></div>
+                </div>
+
+                <h2 class="text-2xl font-creepy text-bubblePink tracking-wide">Amissa (Bloomie)</h2>
+                <p class="text-xs font-mono text-lavender mb-3">[ She/Her • Dark Pastel Mystic ]</p>
+                <div class="flex gap-2">
+                    <span class="px-2 py-0.5 bg-black/60 rounded text-[11px] font-mono text-slimeGreen border border-slimeGreen/20">ARK Specialist</span>
+                    <span class="px-2 py-0.5 bg-black/60 rounded text-[11px] font-mono text-bubblePink border border-bubblePink/20">Artist</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Lore / Bio Window (2 Columns) -->
+            <div class="lg:col-span-2 bg-voidCard border-2 border-darkBorder rounded-2xl p-6 shadow-purple-glow space-y-4">
+                <div class="flex items-center justify-between border-b border-darkBorder pb-3">
+                    <h3 class="text-xl font-pixel text-bubblePink flex items-center gap-2">
+                        <i class="fa-solid fa-id-card text-slimeGreen"></i> THE LORE CARD
+                    </h3>
+                    <span class="font-mono text-xs text-lavender">ID: #G59-BLOOM</span>
+                </div>
+
+                <div class="prose prose-invert max-w-none text-sm leading-relaxed space-y-3 font-cute text-gray-300">
+                    <p>
+                        Welcome to my cozy dark corner of the web! I'm <strong class="text-bubblePink">Bloomie / Amissa</strong>—a digital creator mixing equal parts spooky horror vibes, pastel pink cute energy, and heavy bass shadow rap beats.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 font-mono text-xs">
+                        <div class="bg-gothPurple/40 p-3 rounded-xl border border-bubblePink/20">
+                            <span class="text-slimeGreen font-bold block mb-1">🎮 ARK: Survival Evolved</span>
+                            Master mutant color-line breeder & founder of <em>The Pink Thorn Trading Co.</em>
+                        </div>
+                        <div class="bg-gothPurple/40 p-3 rounded-xl border border-bubblePink/20">
+                            <span class="text-bubblePink font-bold block mb-1">🐈 Fur Babies</span>
+                            Mom to my shadows Lucifer & Ozzie.
+                        </div>
+                        <div class="bg-gothPurple/40 p-3 rounded-xl border border-bubblePink/20">
+                            <span class="text-lavender font-bold block mb-1">🔮 Aesthetics</span>
+                            Whimsigoth, Gurowkawaii, Y2K Nostalgia, Skulls, Crystals & Pink Spikes.
+                        </div>
+                        <div class="bg-gothPurple/40 p-3 rounded-xl border border-bubblePink/20">
+                            <span class="text-acidGreen font-bold block mb-1">✍️ Obsidian Vault</span>
+                            Digital organizer, canvas crafter & aesthetic archivist.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Spooky Jukebox Widget -->
+            <div class="bg-voidCard border-2 border-bubblePink rounded-2xl p-5 shadow-pink-glow flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-bubblePink/30 pb-3 mb-4">
+                        <h3 class="text-lg font-pixel text-slimeGreen flex items-center gap-2">
+                            <i class="fa-solid fa-compact-disc animate-spin" style="animation-duration: 8s;"></i> JUKEBOX
+                        </h3>
+                        <span class="text-xs font-mono bg-bubblePink/20 text-bubblePink px-2 py-0.5 rounded">LO-FI TAPES</span>
+                    </div>
+
+                    <!-- Track Info Display -->
+                    <div class="bg-black/80 rounded-xl p-4 border border-darkBorder text-center space-y-2 mb-4">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-bubblePink/20 text-bubblePink flex items-center justify-center text-xl floating">
+                            <i id="musicIcon" class="fa-solid fa-skull"></i>
+                        </div>
+                        <p id="trackTitle" class="font-mono text-sm text-bubblePink font-bold truncate">Shadow Rap Ambient Beats</p>
+                        <p id="trackArtist" class="font-mono text-xs text-gray-400">G59 / Dark Pastel Beats</p>
+                        
+                        <!-- Animated Equalizer Bars -->
+                        <div class="flex items-end justify-center gap-1 h-6 pt-1" id="eqContainer">
+                            <div class="w-1.5 bg-slimeGreen h-2 transition-all duration-300 rounded-t"></div>
+                            <div class="w-1.5 bg-bubblePink h-5 transition-all duration-300 rounded-t"></div>
+                            <div class="w-1.5 bg-lavender h-3 transition-all duration-300 rounded-t"></div>
+                            <div class="w-1.5 bg-slimeGreen h-6 transition-all duration-300 rounded-t"></div>
+                            <div class="w-1.5 bg-bubblePink h-4 transition-all duration-300 rounded-t"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Music Controls -->
+                <div class="space-y-2">
+                    <button id="playBtn" onclick="togglePlayMusic()" class="w-full py-2 bg-bubblePink text-black font-pixel text-xs rounded-xl hover:bg-slimeGreen transition duration-200 shadow-retro-dark flex items-center justify-center gap-2">
+                        <i id="playIcon" class="fa-solid fa-play"></i> <span id="playText">PLAY VIBES</span>
+                    </button>
+                    <button onclick="nextTrack()" class="w-full py-1.5 bg-gothPurple text-lavender font-mono text-xs rounded-xl hover:text-white border border-lavender/30 transition duration-200">
+                        ⏭ Next Track
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-2xl font-creepy text-slimeGreen tracking-wider flex items-center gap-2">
+                    <span>🔮</span> CRYSTAL CAVERN & LOOT VAULT
+                </h3>
+                <span class="text-xs font-mono text-lavender">[ 4 Vault Items ]</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Vault Item 1 -->
+                <div class="bg-voidCard border-2 border-darkBorder hover:border-bubblePink rounded-2xl p-4 transition duration-300 hover:-translate-y-1 group flex flex-col justify-between">
+                    <div>
+                        <div class="h-32 bg-gothPurple/50 rounded-xl mb-3 flex items-center justify-center text-4xl group-hover:scale-105 transition duration-300 border border-bubblePink/20">
+                            🦖
+                        </div>
+                        <h4 class="font-mono text-bubblePink font-bold text-sm mb-1">Pink Thorn Rex Line</h4>
+                        <p class="text-xs text-gray-400 font-cute">Mutated vibrant pink & toxic green color lines from the ARK redwoods.</p>
+                    </div>
+                    <span class="mt-3 inline-block font-mono text-[10px] text-slimeGreen uppercase">ARK Breed File</span>
+                </div>
+
+                <!-- Vault Item 2 -->
+                <div class="bg-voidCard border-2 border-darkBorder hover:border-slimeGreen rounded-2xl p-4 transition duration-300 hover:-translate-y-1 group flex flex-col justify-between">
+                    <div>
+                        <div class="h-32 bg-gothPurple/50 rounded-xl mb-3 flex items-center justify-center text-4xl group-hover:scale-105 transition duration-300 border border-slimeGreen/20">
+                            🐈‍⬛
+                        </div>
+                        <h4 class="font-mono text-slimeGreen font-bold text-sm mb-1">Lucifer & Ozzie</h4>
+                        <p class="text-xs text-gray-400 font-cute">Feline familiar guardians of the dark pastel sanctuary.</p>
+                    </div>
+                    <span class="mt-3 inline-block font-mono text-[10px] text-bubblePink uppercase">Familiar Log</span>
+                </div>
+
+                <!-- Vault Item 3 -->
+                <div class="bg-voidCard border-2 border-darkBorder hover:border-lavender rounded-2xl p-4 transition duration-300 hover:-translate-y-1 group flex flex-col justify-between">
+                    <div>
+                        <div class="h-32 bg-gothPurple/50 rounded-xl mb-3 flex items-center justify-center text-4xl group-hover:scale-105 transition duration-300 border border-lavender/20">
+                            💎
+                        </div>
+                        <h4 class="font-mono text-lavender font-bold text-sm mb-1">Amethyst Vault</h4>
+                        <p class="text-xs text-gray-400 font-cute">Raw crystal collections, obsidian flakes, and sacred trinkets.</p>
+                    </div>
+                    <span class="mt-3 inline-block font-mono text-[10px] text-acidGreen uppercase">Crystal Stash</span>
+                </div>
+
+                <!-- Vault Item 4 -->
+                <div class="bg-voidCard border-2 border-darkBorder hover:border-bubblePink rounded-2xl p-4 transition duration-300 hover:-translate-y-1 group flex flex-col justify-between">
+                    <div>
+                        <div class="h-32 bg-gothPurple/50 rounded-xl mb-3 flex items-center justify-center text-4xl group-hover:scale-105 transition duration-300 border border-bubblePink/20">
+                            🎀
+                        </div>
+                        <h4 class="font-mono text-bubblePink font-bold text-sm mb-1">GuroKawaii Sketchbook</h4>
+                        <p class="text-xs text-gray-400 font-cute">Digital canvas mixing cute Y2K aesthetics with spooky horror accents.</p>
+                    </div>
+                    <span class="mt-3 inline-block font-mono text-[10px] text-lavender uppercase">Art Portfolio</span>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="bg-voidCard border-2 border-darkBorder rounded-2xl p-6 shadow-purple-glow">
+            <h3 class="text-xl font-pixel text-bubblePink mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-comment-dots text-slimeGreen"></i> LEAVE A CURSE / LOVE NOTE
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-3">
+                    <input id="guestName" type="text" placeholder="Your Spooky Alias..." class="w-full bg-black/60 border border-darkBorder focus:border-bubblePink rounded-xl p-2.5 text-sm font-mono text-white outline-none transition">
+                    <textarea id="guestMsg" rows="3" placeholder="Leave a cute or spooky note..." class="w-full bg-black/60 border border-darkBorder focus:border-bubblePink rounded-xl p-2.5 text-sm font-cute text-white outline-none transition resize-none"></textarea>
+                    <button onclick="addGuestNote()" class="px-5 py-2 bg-gothPurple border border-bubblePink hover:bg-bubblePink hover:text-black font-pixel text-xs text-bubblePink rounded-xl transition duration-200 shadow-retro-dark">
+                        SUBMIT NOTE 💌
+                    </button>
+                </div>
+
+                <!-- Notes Feed -->
+                <div id="notesContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    <div class="bg-black/40 border border-bubblePink/20 p-2.5 rounded-xl font-mono text-xs">
+                        <span class="text-slimeGreen font-bold">@Ghostie:</span> <span class="text-gray-300">"Obsessed with the pink rex color line! 🦖💖"</span>
+                    </div>
+                    <div class="bg-black/40 border border-lavender/20 p-2.5 rounded-xl font-mono text-xs">
+                        <span class="text-lavender font-bold">@VoidWitch:</span> <span class="text-gray-300">"Spooky cutie vibes are 10/10 🖤✨"</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center font-mono text-xs text-gray-500 pt-6 pb-4 space-y-2 border-t border-darkBorder/40">
+            <p class="text-lavender/80">⚡ Crafted with dark pastel magic for Bloomie (Amissa) ⚡</p>
+            <p class="text-[10px]">Spooky Cutie Theme • 2026 • G59 Aesthetic Sanctuary</p>
+        </footer>
+
+    </div>
+
+    <script>
+        /* Interactive Particles Setup */
+        const canvas = document.getElementById('fxCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const SYMBOLS = ['✨', '🦇', '💀', '💖', '🎀', '⚡', '🖤'];
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                this.size = Math.random() * 16 + 12;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4 - 2;
+                this.alpha = 1;
+                this.rotation = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.02;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.font = `${this.size}px sans-serif`;
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.fillText(this.symbol, 0, 0);
+                ctx.restore();
+            }
+        }
+
+        function triggerMagic(e) {
+            const startX = e ? e.clientX : window.innerWidth / 2;
+            const startY = e ? e.clientY : window.innerHeight / 2;
+
+            for (let i = 0; i < 25; i++) {
+                particles.push(new Particle(startX, startY));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        /* Spiral Toggle Logic */
+        let spiralEnabled = true;
+        function toggleSpiral() {
+            const spiral = document.getElementById('spiralOverlay');
+            const state = document.getElementById('spiralState');
+            spiralEnabled = !spiralEnabled;
+            if (spiralEnabled) {
+                spiral.style.opacity = '0.08';
+                state.innerText = 'ON';
+                state.className = 'text-slimeGreen';
+            } else {
+                spiral.style.opacity = '0';
+                state.innerText = 'OFF';
+                state.className = 'text-gray-400';
+            }
+        }
+
+        /* Interactive Jukebox Music Player Logic (Audio Beat Simulation) */
+        let isPlaying = false;
+        let audioContext;
+        let eqInterval;
+
+        const tracks = [
+            { title: "Shadow Rap Ambient Beats", artist: "G59 / Dark Pastel Beats", icon: "fa-skull" },
+            { title: "Redwood Forest Lo-Fi", artist: "ARK Breeding Vibe", icon: "fa-dragon" },
+            { title: "Lucifer's Midnight Purr", artist: "Whimsigoth Chills", icon: "fa-cat" }
+        ];
+        let currentTrackIdx = 0;
+
+        function togglePlayMusic() {
+            const playIcon = document.getElementById('playIcon');
+            const playText = document.getElementById('playText');
+            const musicIcon = document.getElementById('musicIcon');
+
+            isPlaying = !isPlaying;
+
+            if (isPlaying) {
+                playIcon.className = "fa-solid fa-pause";
+                playText.innerText = "PAUSE";
+                startEQAnimation();
+                playToneBeat();
+            } else {
+                playIcon.className = "fa-solid fa-play";
+                playText.innerText = "PLAY VIBES";
+                stopEQAnimation();
+            }
+        }
+
+        function nextTrack() {
+            currentTrackIdx = (currentTrackIdx + 1) % tracks.length;
+            const track = tracks[currentTrackIdx];
+            document.getElementById('trackTitle').innerText = track.title;
+            document.getElementById('trackArtist').innerText = track.artist;
+            document.getElementById('musicIcon').className = `fa-solid ${track.icon}`;
+            if (isPlaying) {
+                playToneBeat();
+            }
+        }
+
+        function startEQAnimation() {
+            const bars = document.querySelectorAll('#eqContainer div');
+            eqInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    const h = Math.floor(Math.random() * 20) + 4;
+                    bar.style.height = `${h}px`;
+                });
+            }, 150);
+        }
+
+        function stopEQAnimation() {
+            clearInterval(eqInterval);
+            const bars = document.querySelectorAll('#eqContainer div');
+            bars.forEach(bar => bar.style.height = '4px');
+        }
+
+        /* Web Audio Synthesizer Beat Feedback */
+        function playToneBeat() {
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(120, audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, audioContext.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start();
+                osc.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log("Audio Context initialized on user click.");
+            }
+        }
+
+        /* Guest Note Addition */
+        function addGuestNote() {
+            const name = document.getElementById('guestName').value.trim() || 'Anonymous Spook';
+            const msg = document.getElementById('guestMsg').value.trim();
+
+            if (!msg) return;
+
+            const container = document.getElementById('notesContainer');
+            const noteDiv = document.createElement('div');
+            noteDiv.className = "bg-black/40 border border-slimeGreen/30 p-2.5 rounded-xl font-mono text-xs animate-fade-in";
+            noteDiv.innerHTML = `<span class="text-slimeGreen font-bold">@${name}:</span> <span class="text-gray-300">"${msg}"</span>`;
+
+            container.prepend(noteDiv);
+            document.getElementById('guestName').value = '';
+            document.getElementById('guestMsg').value = '';
+            triggerMagic();
+        }
+    </script>
+</body>
+</html>
