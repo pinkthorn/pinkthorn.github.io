@@ -5,3 +5,4 @@ my personal shpot, feel me?
 [bloom OS](https://pinkthorn.github.io/bloom-os.html)<br>
 [occult arcade](https://pinkthorn.github.io/occultarcade.html)<br>
 [pink purplse mint](https://pinkthorn.github.io/purplepinkmint.html)
+[bloom OS pixel edition](bloom-os-pixel.html)
